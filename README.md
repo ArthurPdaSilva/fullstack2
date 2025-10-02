@@ -35,23 +35,10 @@ A **JTech** busca desenvolvedores frontend experientes capazes de construir apli
 
 #### Persistência e Navegação
 
-1. **Estado Persistente**: Todo o estado (usuário, listas, tarefas) gerenciado pelo Pinia e persistido em `localStorage`
+1. **Estado Persistente**: Todo o estado (usuário, listas, tarefas) gerenciado pelo Pinia e persistido
 2. **Roteamento**: Vue Router para separar autenticação da aplicação principal
 3. **Guards de Rota**: Proteção de rotas para usuários não autenticados
 
-### Requisitos Não Funcionais
-
-#### Arquitetura e Organização
-
-1. **Estrutura Modular**: Projeto organizado com separação clara de responsabilidades (views, components, stores, utils)
-2. **Componentização Avançada**: Componentes reutilizáveis com props tipadas e eventos bem definidos
-3. **Composables**: Utilização de composition functions para lógicas reutilizáveis
-
-#### Experiência do Usuário
-
-1. **Design Responsivo Premium**: Interface adaptável e consistente em todos os dispositivos
-2. **Feedback Interativo**: Notificações, loaders e animações para todas as ações do usuário
-3. **Estados de Loading**: Simulação de operações assíncronas com indicadores visuais
 
 ### Stack Tecnológica Obrigatória
 
@@ -62,15 +49,66 @@ A **JTech** busca desenvolvedores frontend experientes capazes de construir apli
 * **Testes**: Vitest para testes unitários abrangentes
 * **TypeScript**: Fortemente recomendado para tipagem robusta
 
+#BACKEND
+
+## Especificações Técnicas
+
+### Requisitos Funcionais
+
+#### Sistema de Autenticação Segura
+
+1. **Registro de Usuários**:
+   * Endpoint `POST /auth/register` para cadastro com nome, email e senha
+   * Implementação de hash seguro de senhas utilizando bcrypt
+   * Validação de unicidade de email
+2. **Autenticação JWT**:
+   * Endpoint `POST /auth/login` para autenticação e geração de token JWT
+   * Implementação de refresh token para segurança aprimorada
+
+#### Gerenciamento de Tarefas com Segurança
+
+1. **CRUD Completo de Tarefas**:
+   * `POST /tasks`: Criar tarefa associada ao usuário autenticado
+   * `GET /tasks`: Listar exclusivamente tarefas do usuário logado
+   * `GET /tasks/{id}`: Buscar tarefa específica com validação de propriedade
+   * `PUT /tasks/{id}`: Atualizar tarefa com controle de acesso
+   * `DELETE /tasks/{id}`: Remover tarefa com validação de proprietário
+2. **Autorização Robusta**: Todas as rotas protegidas por JWT com validação de propriedade dos recursos
+
+### Requisitos Não Funcionais
+
+#### Arquitetura e Design Patterns
+
+1. **Princípios SOLID**: Implementação rigorosa dos cinco princípios em todas as camadas
+2. **Arquitetura em Camadas**: Estrutura bem definida (Controller → Service → Repository → Domain)
+3. **Injeção de Dependência**: Utilização adequada do Spring Framework para IoC
+4. **Exception Handling**: Sistema robusto de tratamento centralizado de exceções
+
+#### Qualidade e Testabilidade
+
+1. **Testes Unitários**: Cobertura completa da camada de serviço com cenários de sucesso e falha
+2. **Testes de Integração**: Validação end-to-end dos endpoints com Spring Test
+3. **Mocks e Stubs**: Utilização adequada de Mockito para isolamento de dependências
+
+### Stack Tecnológica Obrigatória
+
+* **Linguagem**: Java 17+
+* **Framework**: Spring Boot, Spring Security, Spring Validation
+* **Persistência**: Spring Data JPA com Hibernate
+* **Banco de Dados**: PostgreSQL
+* **Segurança**: JWT, BCrypt
+* **Testes**: JUnit 5, Mockito, Spring Boot Test
+
 ## Critérios de Avaliação
 
-* **Qualidade Arquitetural**: Código limpo, bem documentado e facilmente manutenível
-* **Aplicação de Boas Práticas**: Demonstração de Clean Code, KISS e componentização eficaz
-* **Arquitetura Modular**: Estrutura de projeto bem definida e organizada
-* **Gerenciamento de Estado**: Uso correto e eficiente do Pinia para estado complexo
-* **Qualidade dos Testes**: Cobertura abrangente testando componentes e stores
+* **Aplicação de SOLID**: Demonstração clara e justificada dos princípios SOLID (critério principal)
+* **Qualidade Arquitetural**: Design limpo, modular com separação clara de responsabilidades
+* **Cobertura de Testes**: Suite robusta e significativa de testes unitários e de integração
+* **Implementação de Segurança**: Autenticação e autorização corretamente implementadas
+* **Domínio da Stack**: Utilização avançada e adequada do ecossistema Spring
 * **Domínio da Stack**: Utilização avançada das ferramentas do ecossistema Vue.js
-* **Experiência do Usuário**: Interface intuitiva com excelente usabilidade
+* **Modelagem de Dados**: Relacionamento bem definido entre entidades User e Task
+* **Documentação Técnica**: README detalhado com justificativas arquiteturais
 
 ## Expectativa de Entrega
 
