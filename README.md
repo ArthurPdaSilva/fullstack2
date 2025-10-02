@@ -49,7 +49,7 @@ A **JTech** busca desenvolvedores frontend experientes capazes de construir apli
 * **Testes**: Vitest para testes unitários abrangentes
 * **TypeScript**: Fortemente recomendado para tipagem robusta
 
-#BACKEND
+# BACKEND
 
 ## Especificações Técnicas
 
