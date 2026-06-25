@@ -1,4 +1,4 @@
-# FullStack2 - JTech Challenge - Frontend
+# FullStack2 - JTech Challenge - Backend
 
 ## 1. Visão Geral da Arquitetura
 
