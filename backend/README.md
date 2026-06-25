@@ -26,9 +26,55 @@
 | MockMvc | Testes de integração REST |
 | Docker / Docker Compose | Containerização e ambiente local |
 
-## 3. Como Rodar Localmente
+## 3. Como Rodar 
 
-<!-- Instruções passo a passo para setup e execução -->
+## 3.1 Como Rodar Localmente
+
+**Pré-requisitos:** Java 17, Maven (ou o Maven Wrapper `./mvnw`), PostgreSQL 16 rodando.
+
+1. Clone o repositório e acesse a pasta `backend/`
+2. Crie um banco PostgreSQL (padrão: `tasklist`) ou configure via variáveis de ambiente
+3. Configure as variáveis de ambiente abaixo (ou edite o arquivo `.env`):
+
+   | Variável     | Padrão       | Descrição                    |
+   |--------------|--------------|------------------------------|
+   | `DB_HOST`    | `localhost`  | Host do PostgreSQL           |
+   | `DB_PORT`    | `5432`       | Porta do PostgreSQL          |
+   | `DB_NAME`    | `tasklist`   | Nome do banco de dados       |
+   | `DB_USER`    | `postgres`   | Usuário do banco             |
+   | `DB_PASS`    | `postgres`   | Senha do banco               |
+   | `JWT_SECRET` | *(default)*  | Chave secreta para JWT       |
+
+4. Execute a aplicação:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+5. A API estará disponível em [http://localhost:8000](http://localhost:8000)
+6. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
+
+## 3.2 Como Rodar com Docker
+
+**Pré-requisitos:** Docker e Docker Compose.
+
+1. Clone o repositório e acesse a pasta `backend/`
+2. Configure o arquivo `.env` com as seguintes variáveis:
+
+   | Variável                   | Exemplo                                                      | Descrição                  |
+   |----------------------------|--------------------------------------------------------------|----------------------------|
+   | `POSTGRES_USER`            | `tasklist`                                                   | Usuário do PostgreSQL      |
+   | `POSTGRES_PASSWORD`        | `tasklist`                                                   | Senha do PostgreSQL        |
+   | `POSTGRES_DB`              | `tasklist`                                                   | Nome do banco de dados     |
+   | `JWT_SECRET`               | `ZGV2LXNlY3JldC1rZXkt...`                                   | Chave secreta para JWT     |
+   | `PGADMIN_DEFAULT_EMAIL`    | `admin@jtech.com.br`                                         | Email do pgAdmin           |
+   | `PGADMIN_DEFAULT_PASSWORD` | `admin`                                                      | Senha do pgAdmin           |
+
+3. Execute o ambiente:
+   ```bash
+   docker compose up --build
+   ```
+4. A API estará disponível em [http://localhost:8000](http://localhost:8000)
+5. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
+6. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`)
 
 ## 4. Como Rodar os Testes
 
