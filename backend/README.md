@@ -90,4 +90,6 @@
 
 ## 7. Melhorias e Roadmap
 
+* ### Logging para Observabilidade
+* ### Pipeline de CI/CD com GitHub Actions
 <!-- Propostas técnicas para evolução e escalabilidade -->
