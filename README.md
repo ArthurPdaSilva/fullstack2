@@ -2,7 +2,7 @@
 
 Monorepo do desafio técnico Fullstack2 da JTech.
 
-## Projetos
+## README dos Projetos
 
 - [**Backend**](backend/README.md) — API REST com Spring Boot, Spring Security, JPA, PostgreSQL e JWT
 - [**Frontend**](frontend/README.md) — Aplicação com Vue 3, TypeScript, Pinia, Vuetify e Axios
