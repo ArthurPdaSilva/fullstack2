@@ -159,4 +159,54 @@ class TaskServiceTest {
                 () -> taskService.delete(taskId, userId.toString()));
         verify(taskRepository, never()).delete(any(Task.class));
     }
+
+    @Test
+    void create_ShouldAcceptNullDescription() {
+        var request = new TaskRequest("Title Only", null, false);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+
+        var response = taskService.create(request, userId.toString());
+
+        assertNotNull(response);
+        verify(taskRepository).save(any(Task.class));
+    }
+
+    @Test
+    void findAllByUserId_ShouldReturnEmptyList_WhenNoTasks() {
+        when(taskRepository.findByUserIdOrderByCreatedAtDesc(userId)).thenReturn(List.of());
+
+        var tasks = taskService.findAllByUserId(userId.toString());
+
+        assertTrue(tasks.isEmpty());
+    }
+
+    @Test
+    void update_ShouldPreserveCompletedFlag_WhenNotChanged() {
+        task.setCompleted(true);
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
+
+        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+
+        var response = taskService.update(taskId, updateRequest, userId.toString());
+
+        assertTrue(response.isCompleted());
+        verify(taskRepository).save(any(Task.class));
+    }
+
+    @Test
+    void update_ShouldUnmarkCompleted_WhenSetToFalse() {
+        task.setCompleted(true);
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", false);
+
+        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.save(any(Task.class))).thenReturn(task);
+
+        var response = taskService.update(taskId, updateRequest, userId.toString());
+
+        assertFalse(response.isCompleted());
+        verify(taskRepository).save(any(Task.class));
+    }
 }

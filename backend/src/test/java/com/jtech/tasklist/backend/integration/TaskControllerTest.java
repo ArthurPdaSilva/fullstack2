@@ -156,4 +156,63 @@ class TaskControllerTest {
                         .header("Authorization", token))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void create_ShouldReturn400_WhenTitleIsBlank() throws Exception {
+        mockMvc.perform(post("/tasks")
+                        .header("Authorization", token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"\",\"description\":\"Desc\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void update_ShouldReturn400_WhenTitleIsBlank() throws Exception {
+        var result = mockMvc.perform(post("/tasks")
+                        .header("Authorization", token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"My Task\",\"description\":\"Desc\"}"))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        var content = result.getResponse().getContentAsString();
+        var id = content.split("\"id\":\"")[1].split("\"")[0];
+
+        mockMvc.perform(put("/tasks/{id}", id)
+                        .header("Authorization", token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"\",\"description\":\"Updated\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void findById_ShouldReturn404_WhenUUIDIsInvalid() throws Exception {
+        mockMvc.perform(get("/tasks/invalid-uuid")
+                        .header("Authorization", token))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void findAll_ShouldReturnEmpty_WhenNoTasks() throws Exception {
+        mockMvc.perform(get("/tasks")
+                        .header("Authorization", token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
+    void update_ShouldReturn404_WhenTaskDoesNotExist() throws Exception {
+        mockMvc.perform(put("/tasks/{id}", "00000000-0000-0000-0000-000000000000")
+                        .header("Authorization", token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Updated\",\"description\":\"Desc\"}"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void delete_ShouldReturn404_WhenTaskDoesNotExist() throws Exception {
+        mockMvc.perform(delete("/tasks/{id}", "00000000-0000-0000-0000-000000000000")
+                        .header("Authorization", token))
+                .andExpect(status().isNotFound());
+    }
 }

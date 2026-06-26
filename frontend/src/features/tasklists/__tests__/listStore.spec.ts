@@ -81,4 +81,44 @@ describe('listStore', () => {
     store.addTaskToList(list.id, 'task-1')
     expect(store.getListById(list.id)?.taskIds).toHaveLength(1)
   })
+
+  it('renaming non-existent list does nothing', () => {
+    const store = useListStore()
+    store.renameList('non-existent', 'New Name')
+    expect(store.lists).toHaveLength(0)
+  })
+
+  it('adds multiple lists', () => {
+    const store = useListStore()
+    store.addList('Trabalho')
+    store.addList('Estudos')
+    store.addList('Pessoal')
+    expect(store.lists).toHaveLength(3)
+  })
+
+  it('addTaskToList to non-existent list does nothing', () => {
+    const store = useListStore()
+    store.addTaskToList('non-existent', 'task-1')
+    expect(store.lists).toHaveLength(0)
+  })
+
+  it('removeTaskFromList from non-existent list does nothing', () => {
+    const store = useListStore()
+    store.removeTaskFromList('non-existent', 'task-1')
+    expect(store.lists).toHaveLength(0)
+  })
+
+  it('hasPendingTasks returns false for non-existent list', () => {
+    const store = useListStore()
+    expect(store.hasPendingTasks('non-existent', [])).toBe(false)
+  })
+
+  it('persists lists to localStorage', () => {
+    const store = useListStore()
+    store.addList('Persisted List')
+    const key = `lists_guest`
+    const saved = JSON.parse(localStorage.getItem(key) || '[]')
+    expect(saved).toHaveLength(1)
+    expect(saved[0].name).toBe('Persisted List')
+  })
 })

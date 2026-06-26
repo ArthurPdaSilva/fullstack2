@@ -136,4 +136,44 @@ class AuthServiceTest {
         assertThrows(BadRequestException.class, () -> authService.register(request));
         verify(userRepository, never()).save(any(User.class));
     }
+
+    @Test
+    void login_ShouldBeCaseSensitiveOnEmail() {
+        var user = User.builder()
+                .id(UUID.randomUUID())
+                .name("John")
+                .email("john@email.com")
+                .password(passwordEncoder.encode("123456"))
+                .build();
+        var request = new LoginRequest("John@email.com", "123456");
+
+        when(userRepository.findByEmail("John@email.com")).thenReturn(Optional.empty());
+
+        assertThrows(UnauthorizedException.class, () -> authService.login(request));
+    }
+
+    @Test
+    void register_ShouldTrimName() {
+        var userId = UUID.randomUUID();
+        var request = new RegisterRequest("  John  ", "john@email.com", "123456");
+        var savedUser = User.builder()
+                .id(userId)
+                .name("  John  ")
+                .email("john@email.com")
+                .password(passwordEncoder.encode("123456"))
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        when(userRepository.existsByEmail("john@email.com")).thenReturn(false);
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(jwtTokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
+        when(jwtTokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
+        when(jwtTokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
+        when(jwtTokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
+
+        var response = authService.register(request);
+
+        assertNotNull(response);
+        verify(userRepository).save(argThat(user -> "  John  ".equals(user.getName())));
+    }
 }

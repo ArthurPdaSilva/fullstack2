@@ -115,4 +115,36 @@ class AuthControllerTest {
                         .content("{\"email\":\"john@email.com\",\"password\":\"wrongpass\"}"))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void register_ShouldReturn400_WhenEmailIsInvalid() throws Exception {
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"John\",\"email\":\"invalid-email\",\"password\":\"123456\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void login_ShouldReturn400_WhenEmailIsBlank() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"\",\"password\":\"123456\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void login_ShouldReturn400_WhenPasswordIsBlank() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"john@email.com\",\"password\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void register_ShouldReturn400_WhenAllFieldsAreMissing() throws Exception {
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+    }
 }
