@@ -78,7 +78,13 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 
 ## 4. Como Rodar os Testes
 
-<!-- Comandos para executar suite completa de testes -->
+**Pré-requisito:** JDK 17 instalado e configurado (`java -version` deve mostrar `17`).
+
+```bash
+./mvnw test
+```
+
+Os testes usam **JUnit 5** + **Mockito** para testes unitários e **MockMvc** para testes de integração dos endpoints REST. O banco **H2** é utilizado automaticamente no lugar do PostgreSQL durante os testes.
 
 ## 5. Estrutura de Pastas Detalhada
 

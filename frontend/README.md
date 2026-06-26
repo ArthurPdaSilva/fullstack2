@@ -6,21 +6,21 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 
 ## 2. Stack Tecnológica
 
-| Tecnologia | Finalidade |
-|------------|------------|
-| Vue 3 | Framework frontend (Composition API) |
-| TypeScript | Superset tipado para JavaScript |
-| Vite | Build tool e dev server |
-| Pinia | Gerenciamento de estado |
-| Vue Router | Roteamento SPA |
-| Vuetify 3 | Biblioteca de componentes UI (Material Design) |
-| Axios | Cliente HTTP para requisições à API |
-| Vitest | Testes unitários |
-| Vue Test Utils | Utilitários para testes de componentes |
-| Vue-TSC | Type-checking para Vue SFCs |
-| ESLint + Prettier | Linter e formatador de código |
-| jsdom | Simulação de DOM para testes |
-| @mdi/font | Ícones Material Design |## 3. Como Rodar Localmente
+| Tecnologia        | Finalidade                                     |
+| ----------------- | ---------------------------------------------- | --------------------------- |
+| Vue 3             | Framework frontend (Composition API)           |
+| TypeScript        | Superset tipado para JavaScript                |
+| Vite              | Build tool e dev server                        |
+| Pinia             | Gerenciamento de estado                        |
+| Vue Router        | Roteamento SPA                                 |
+| Vuetify 3         | Biblioteca de componentes UI (Material Design) |
+| Axios             | Cliente HTTP para requisições à API            |
+| Vitest            | Testes unitários                               |
+| Vue Test Utils    | Utilitários para testes de componentes         |
+| Vue-TSC           | Type-checking para Vue SFCs                    |
+| ESLint + Prettier | Linter e formatador de código                  |
+| jsdom             | Simulação de DOM para testes                   |
+| @mdi/font         | Ícones Material Design                         | ## 3. Como Rodar Localmente |
 
 **Pré-requisitos:** Node.js 18+, npm (ou pnpm/yarn).
 
@@ -50,6 +50,12 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
    ```
 
 ## 4. Como Rodar os Testes
+
+```bash
+npm run test:unit
+```
+
+Os testes usam **Vitest** com **jsdom** para simulação de DOM e **Vue Test Utils** para renderização de componentes.
 
 ## 5. Estrutura de Pastas Detalhada
 
