@@ -175,6 +175,10 @@ Cada módulo de domínio segue uma arquitetura em camadas:
 
 Usei inteligência artificial para otimizar o desenvolvimento das camadas de **repository**, **service**, **controller** e **DTO**, acelerando a escrita de código boilerplate e a estruturação dos módulos. Todo o código gerado foi revisado e adaptado por mim para garantir que atendesse aos requisitos do projeto.
 
+### Uso do Docker
+
+Optei por utilizar Docker para conteinerizar os serviços da aplicação, principalmente o PostgreSQL e o pgAdmin. Essa abordagem garante um ambiente de desenvolvimento consistente entre diferentes máquinas, reduzindo problemas relacionados à configuração do sistema operacional ou a diferenças de versões das ferramentas. Além de eliminar a necessidade de instalar e configurar manualmente o banco de dados e suas dependências em cada ambiente, o Docker simplifica a inicialização do projeto, bastando executar os containers necessários. Essa estratégia também facilita a integração futura com pipelines de CI/CD, tornando o processo de build, testes e deploy mais previsível e reproduzível.
+
 
 ## 7. Melhorias e Roadmap
 
