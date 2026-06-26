@@ -146,6 +146,10 @@ Usei inteligência artificial como apoio para o design visual e para reforçar a
 
 Mantive o **ESLint** e **Prettier** por já estarem configurados no template inicial do projeto. Porém, reconheço que o **Biome** tem vantagens significativas: unifica linting e formatação em uma única ferramenta, é mais rápido por ser escrito em Rust, e tem configuração mais simples (arquivo único, zero plugins).
 
+### VueJS vs React
+
+Apesar de possuir maior experiência com React, optei por desenvolver o projeto em Vue.js por uma decisão estratégica. Os projetos caso eu avance utilizarão Vue.js como principal tecnologia no front-end, tornando essa uma oportunidade para aprofundar meus conhecimentos no ecossistema que pretendo utilizar profissionalmente. Embora minha experiência prática com Vue fosse menor, eu já possuía uma base acadêmica sobre o framework, o que facilitou o aprendizado. Além disso, utilizei inteligência artificial como ferramenta de apoio para esclarecer dúvidas pontuais sobre a sintaxe do Vue 3 com Composition API (bem parecido com os states do React) e acelerar a adaptação às melhores práticas da tecnologia. Todo o código gerado foi analisado, revisado e adaptado por mim para atender aos requisitos do projeto.
+
 ## 7. Melhorias e Roadmap
 
 ### Curto prazo

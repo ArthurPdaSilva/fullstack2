@@ -8,7 +8,7 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 
 - Arquitetura em camadas por domínio (controller → service → repository)
 - Tratamento global de exceções com `@RestControllerAdvice`
-- Documentação automática com SpringDoc OpenAPI
+- Documentação automática com SpringDoc OpenAPI e Swagger
 - Containerização via Docker Compose (app + PostgreSQL + pgAdmin)
 
 ## 2. Stack Tecnológica
@@ -175,7 +175,6 @@ Cada módulo de domínio segue uma arquitetura em camadas:
 
 Usei inteligência artificial para otimizar o desenvolvimento das camadas de **repository**, **service**, **controller** e **DTO**, acelerando a escrita de código boilerplate e a estruturação dos módulos. Todo o código gerado foi revisado e adaptado por mim para garantir que atendesse aos requisitos do projeto.
 
-<!-- Justificativas sobre escolhas arquiteturais, padrões e bibliotecas -->
 
 ## 7. Melhorias e Roadmap
 
@@ -185,6 +184,7 @@ Usei inteligência artificial para otimizar o desenvolvimento das camadas de **r
 ### Médio prazo
 - [ ] Paginação no servidor para listas com muitas tarefas
 - [ ] Logging estruturado para observabilidade
+- [ ] Adicionar Flyway para manter o histórico das migrations
 
 ### Longo prazo
 - [ ] Pipeline de CI/CD com GitHub Actions
