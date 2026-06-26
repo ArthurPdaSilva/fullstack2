@@ -7,7 +7,7 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 ## 2. Stack Tecnológica
 
 | Tecnologia        | Finalidade                                     |
-| ----------------- | ---------------------------------------------- | --------------------------- |
+| ----------------- | ---------------------------------------------- |
 | Vue 3             | Framework frontend (Composition API)           |
 | TypeScript        | Superset tipado para JavaScript                |
 | Vite              | Build tool e dev server                        |
@@ -20,7 +20,9 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 | Vue-TSC           | Type-checking para Vue SFCs                    |
 | ESLint + Prettier | Linter e formatador de código                  |
 | jsdom             | Simulação de DOM para testes                   |
-| @mdi/font         | Ícones Material Design                         | ## 3. Como Rodar Localmente |
+| @mdi/font         | Ícones Material Design                         |
+
+## 3. Como Rodar Localmente
 
 **Pré-requisitos:** Node.js 18+, npm (ou pnpm/yarn).
 
