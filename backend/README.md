@@ -160,6 +160,10 @@ Cada módulo de domínio segue uma arquitetura em camadas:
 
 ## 6. Decisões Técnicas Aprofundadas
 
+### Uso de IA no Desenvolvimento
+
+Usei inteligência artificial para otimizar o desenvolvimento das camadas de **repository**, **service**, **controller** e **DTO**, acelerando a escrita de código boilerplate e a estruturação dos módulos. Todo o código gerado foi revisado e adaptado por mim para garantir que atendesse aos requisitos do projeto.
+
 <!-- Justificativas sobre escolhas arquiteturais, padrões e bibliotecas -->
 
 ## 7. Melhorias e Roadmap
