@@ -174,7 +174,12 @@ Usei inteligência artificial para otimizar o desenvolvimento das camadas de **r
 
 ## 7. Melhorias e Roadmap
 
-* ### Logging para Observabilidade
-  Pretendo adicionar uma estratégia de logging estruturado para facilitar a observação da aplicação em produção.
-* ### Pipeline de CI/CD com GitHub Actions
-  Penso em configurar uma pipeline de integração e deploy contínuo usando GitHub Actions.
+### Curto prazo
+- [ ] Criar uma representação da listagem de tarefas no Domínio
+
+### Médio prazo
+- [ ] Paginação no servidor para listas com muitas tarefas
+- [ ] Logging estruturado para observabilidade
+
+### Longo prazo
+- [ ] Pipeline de CI/CD com GitHub Actions

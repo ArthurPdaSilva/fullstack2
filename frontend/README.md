@@ -141,24 +141,23 @@ Mantive o **ESLint** e **Prettier** por já estarem configurados no template ini
 
 ## 7. Melhorias e Roadmap
 
-### Cache de Requisições
+### Curto prazo
 
-Penso em implementar uma camada de cache para requisições HTTP usando **TanStack Query**. Isso traria:
+- [ ] Implementar refresh token automático (backend gera, frontend não consome)
+- [ ] Adicionar feedback visual (toast/snackbar) para operações CRUD
+- [ ] Adicionar loading skeleton nas telas
 
-- Deduplicação automática de requisições concorrentes
-- Cache em memória com stale-while-revalidate
-- Refetch automático em background
-- Estado de loading/error padronizado
+### Médio prazo
 
-### Testes E2E com Playwright
+- [ ] Adicionar drag-and-drop para reordenar tarefas
+- [ ] Implementar busca/filtro de tarefas por texto e status
+- [ ] Adicionar testes de integração com Vue Test Utils para componentes
+- [ ] Migrar ESLint + Prettier para Biome
 
-Pretendo adicionar testes end-to-end com **Playwright** para cobrir fluxos críticos:
+### Longo prazo
 
-- Autenticação (login/logout)
-- CRUD completo de usuários, listas e tarefas
-- Persistência entre recarregamentos de página
-- Responsividade nos diferentes breakpoints
-
-### Migração para Biome
-
-Substituir ESLint + Prettier pelo **Biome**, unificando lint e formatação em uma ferramenta só, eliminando a complexidade de manter múltiplos arquivos de configuração e plugins.
+- [ ] Cache de requisições com TanStack Query
+- [ ] Modo escuro (dark theme) nativo do Vuetify
+- [ ] Suporte a multi-idiomas (i18n)
+- [ ] Testes E2E com Playwright
+- [ ] CI/CD com GitHub Actions (lint → test → build → deploy)
