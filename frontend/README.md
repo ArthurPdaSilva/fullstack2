@@ -28,8 +28,11 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 | ESLint + Prettier | Linter e formatador de código                  |
 | jsdom             | Simulação de DOM para testes                   |
 | @mdi/font         | Ícones Material Design                         |
+| Docker / Docker Compose | Containerização e ambiente local          |
 
-## 3. Como Rodar Localmente
+## 3. Como Rodar
+
+### 3.1 Como Rodar Localmente
 
 **Pré-requisitos:** Node.js 18+, npm (ou pnpm/yarn).
 
@@ -57,6 +60,22 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
    ```bash
    npm run build
    ```
+
+### 3.2 Como Rodar com Docker
+
+**Pré-requisitos:** Docker e Docker Compose.
+
+1. Na raiz do projeto, execute o ambiente completo:
+
+   ```bash
+   docker compose up --build
+   ```
+
+2. A aplicação estará disponível em [http://localhost:5173](http://localhost:5173)
+
+3. A API estará disponível em [http://localhost:8000](http://localhost:8000)
+
+4. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`)
 
 ## 4. Como Rodar os Testes
 
@@ -141,6 +160,10 @@ Cada feature segue uma estrutura padronizada:
 ### Uso de IA no Desenvolvimento
 
 Usei inteligência artificial como apoio para o design visual e para reforçar a sintaxe do Vue 3 com Composition API, já que eu não tinha familiaridade com o ecossistema. A IA me ajudou a acelerar a prototipagem do layout com Vuetify e a escrever código seguindo boas práticas. Todo o código gerado foi revisado e adaptado por mim para garantir que atendesse aos requisitos do projeto.
+
+### Uso do Docker
+
+Optei por containerizar também o frontend com Docker, seguindo a mesma abordagem do backend. O Dockerfile utiliza um build multi-stage: a primeira etapa compila a aplicação Vue com Vite em um container Node.js, e a segunda etapa serve os arquivos estáticos com Nginx, resultando em uma imagem leve e otimizada para produção. O docker-compose na raiz do projeto orquestra todos os serviços (PostgreSQL, API Spring Boot, pgAdmin e frontend), permitindo subir o ambiente completo com um único comando. Essa estratégia garante consistência entre ambientes de desenvolvimento e produção, além de facilitar a integração com pipelines de CI/CD.
 
 ### ESLint + Prettier vs Biome
 

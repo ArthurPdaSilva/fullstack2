@@ -9,7 +9,7 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 - Arquitetura em camadas por domínio (controller → service → repository)
 - Tratamento global de exceções com `@RestControllerAdvice`
 - Documentação automática com SpringDoc OpenAPI e Swagger
-- Containerização via Docker Compose (app + PostgreSQL + pgAdmin)
+- Containerização via Docker Compose (frontend + app + PostgreSQL + pgAdmin)
 
 ## 2. Stack Tecnológica
 
@@ -61,8 +61,7 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 
 **Pré-requisitos:** Docker e Docker Compose.
 
-1. Clone o repositório e acesse a pasta `backend/`
-2. Configure o arquivo `.env` com as seguintes variáveis:
+1. Na raiz do projeto, configure o arquivo `backend/.env` com as seguintes variáveis:
 
    | Variável                   | Exemplo                                                      | Descrição                  |
    |----------------------------|--------------------------------------------------------------|----------------------------|
@@ -70,16 +69,17 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
    | `POSTGRES_PASSWORD`        | `tasklist`                                                   | Senha do PostgreSQL        |
    | `POSTGRES_DB`              | `tasklist`                                                   | Nome do banco de dados     |
    | `JWT_SECRET`               | `ZGV2LXNlY3JldC1rZXkt...`                                   | Chave secreta para JWT     |
-   | `PGADMIN_DEFAULT_EMAIL`    | `example@jtech.com.br`                                         | Email do pgAdmin           |
+   | `PGADMIN_DEFAULT_EMAIL`    | `admin@jtech.com.br`                                         | Email do pgAdmin           |
    | `PGADMIN_DEFAULT_PASSWORD` | `admin`                                                      | Senha do pgAdmin           |
 
-3. Execute o ambiente:
+2. Execute o ambiente completo (frontend + backend):
    ```bash
    docker compose up --build
    ```
-4. A API estará disponível em [http://localhost:8000](http://localhost:8000)
-5. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
-6. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `example@jtech.com.br` / senha: `admin`)
+3. A API estará disponível em [http://localhost:8000](http://localhost:8000)
+4. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
+5. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`)
+6. Frontend: [http://localhost:5173](http://localhost:5173)
 
 ## 4. Como Rodar os Testes
 
@@ -177,7 +177,7 @@ Usei inteligência artificial para otimizar o desenvolvimento das camadas de **r
 
 ### Uso do Docker
 
-Optei por utilizar Docker para conteinerizar os serviços da aplicação, principalmente o PostgreSQL e o pgAdmin. Essa abordagem garante um ambiente de desenvolvimento consistente entre diferentes máquinas, reduzindo problemas relacionados à configuração do sistema operacional ou a diferenças de versões das ferramentas. Além de eliminar a necessidade de instalar e configurar manualmente o banco de dados e suas dependências em cada ambiente, o Docker simplifica a inicialização do projeto, bastando executar os containers necessários. Essa estratégia também facilita a integração futura com pipelines de CI/CD, tornando o processo de build, testes e deploy mais previsível e reproduzível.
+Optei por utilizar Docker para conteinerizar todos os serviços da aplicação, incluindo o frontend Vue.js (servido via Nginx), a API Spring Boot, o PostgreSQL e o pgAdmin. O docker-compose na raiz do projeto orquestra todos os containers, permitindo subir o ambiente completo com um único comando. O frontend utiliza um build multi-stage: a compilação é feita em um container Node.js e os arquivos estáticos são servidos pelo Nginx, resultando em uma imagem leve e otimizada para produção. Essa abordagem garante um ambiente de desenvolvimento consistente entre diferentes máquinas, eliminando a necessidade de instalar e configurar manualmente cada ferramenta, além de facilitar a integração com pipelines de CI/CD.
 
 ### Injeção de Dependência
 
