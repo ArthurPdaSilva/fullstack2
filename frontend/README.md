@@ -2,7 +2,15 @@
 
 ## 1. Visão Geral da Arquitetura
 
-Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio da aplicação (`auth`, `tasklists`, `tasks`) é isolado em seu próprio módulo com componentes, store, views e tipos, o que facilita a manutenção e escalabilidade do código.
+Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio da aplicação (`auth`, `tasklists`, `tasks`) é isolado em seu próprio módulo com componentes, store, views, testes unitários e tipos, o que facilita a manutenção e escalabilidade do código.
+
+**Princípios arquiteturais:**
+
+- Separação por domínio (feature-first)
+- Injeção de dependência via Pinia stores
+- Persistência de estado com `pinia-plugin-persistedstate` (localStorage) para sessão e listas
+- Comunicação com backend real via Axios com interceptors JWT
+- Rotas protegidas por Navigation Guards
 
 ## 2. Stack Tecnológica
 
@@ -159,5 +167,5 @@ Mantive o **ESLint** e **Prettier** por já estarem configurados no template ini
 - [ ] Cache de requisições com TanStack Query
 - [ ] Modo escuro (dark theme) nativo do Vuetify
 - [ ] Suporte a multi-idiomas (i18n)
-- [ ] Testes E2E com Playwright
+- [ ] Testes E2E com Playwright/Cypress
 - [ ] CI/CD com GitHub Actions (lint → test → build → deploy)
