@@ -183,7 +183,7 @@ Optei por utilizar Docker para conteinerizar os serviços da aplicação, princi
 ## 7. Melhorias e Roadmap
 
 ### Curto prazo
-- [ ] Criar uma representação da listagem de tarefas no Domínio
+- [ ] Criar uma representação da listagem de tarefas no Domínio e adicionar testes para isso.
 
 ### Médio prazo
 - [ ] Paginação no servidor para listas com muitas tarefas
