@@ -82,7 +82,81 @@
 
 ## 5. Estrutura de Pastas Detalhada
 
-<!-- Mapeamento completo da organização modular do código -->
+```
+src/
+├── main/
+│   ├── java/com/jtech/tasklist/backend/
+│   │   ├── BackendApplication.java          # Entry point da aplicação
+│   │   │
+│   │   ├── auth/                            # Módulo de autenticação
+│   │   │   ├── controller/
+│   │   │   │   └── AuthController.java
+│   │   │   ├── domain/
+│   │   │   │   └── User.java
+│   │   │   ├── dto/
+│   │   │   │   ├── AuthResponse.java
+│   │   │   │   ├── LoginRequest.java
+│   │   │   │   └── RegisterRequest.java
+│   │   │   ├── repository/
+│   │   │   │   └── UserRepository.java
+│   │   │   └── service/
+│   │   │       └── AuthService.java
+│   │   │
+│   │   ├── task/                            # Módulo de tarefas
+│   │   │   ├── controller/
+│   │   │   │   └── TaskController.java
+│   │   │   ├── domain/
+│   │   │   │   └── Task.java
+│   │   │   ├── dto/
+│   │   │   │   ├── TaskRequest.java
+│   │   │   │   └── TaskResponse.java
+│   │   │   ├── repository/
+│   │   │   │   └── TaskRepository.java
+│   │   │   └── service/
+│   │   │       └── TaskService.java
+│   │   │
+│   │   ├── config/                          # Configurações globais
+│   │   │   ├── OpenApiConfig.java
+│   │   │   ├── SecurityConfig.java
+│   │   │   └── WebConfig.java
+│   │   │
+│   │   ├── exception/                       # Tratamento de erros
+│   │   │   ├── ApiError.java
+│   │   │   ├── BadRequestException.java
+│   │   │   ├── GlobalExceptionHandler.java
+│   │   │   ├── ResourceNotFoundException.java
+│   │   │   └── UnauthorizedException.java
+│   │   │
+│   │   └── jwt/                             # Autenticação JWT
+│   │       ├── JwtAuthenticationFilter.java
+│   │       └── JwtTokenProvider.java
+│   │
+│   └── resources/
+│       └── application.properties
+│
+└── test/
+    ├── java/com/jtech/tasklist/backend/
+    │   ├── BackendApplicationTests.java
+    │   ├── auth/
+    │   │   └── AuthServiceTest.java
+    │   ├── integration/
+    │   │   ├── AuthControllerTest.java
+    │   │   └── TaskControllerTest.java
+    │   └── task/
+    │       └── TaskServiceTest.java
+    └── resources/
+        └── application.properties
+```
+
+Cada módulo de domínio segue uma arquitetura em camadas:
+
+| Camada       | Finalidade                             |
+|--------------|----------------------------------------|
+| `controller` | Endpoints REST da feature              |
+| `domain`     | Entidade JPA (modelo do banco)         |
+| `dto`        | Objetos de requisição e resposta       |
+| `repository` | Interface Spring Data JPA              |
+| `service`    | Lógica de negócio do módulo            |
 
 ## 6. Decisões Técnicas Aprofundadas
 
