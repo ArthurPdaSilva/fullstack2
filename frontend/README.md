@@ -7,7 +7,6 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 **Princípios arquiteturais:**
 
 - Separação por domínio (feature-first)
-- Injeção de dependência via Pinia stores
 - Persistência de estado com `pinia-plugin-persistedstate` (localStorage) para sessão e listas
 - Comunicação com backend real via Axios com interceptors JWT
 - Rotas protegidas por Navigation Guards
