@@ -153,6 +153,7 @@ Mantive o **ESLint** e **Prettier** por já estarem configurados no template ini
 - [ ] Implementar refresh token automático (backend gera, frontend não consome)
 - [ ] Adicionar feedback visual (toast/snackbar) para operações CRUD
 - [ ] Adicionar loading skeleton nas telas
+- [ ] Dividir a tela de Login com a de registro
 
 ### Médio prazo
 
@@ -168,3 +169,4 @@ Mantive o **ESLint** e **Prettier** por já estarem configurados no template ini
 - [ ] Suporte a multi-idiomas (i18n)
 - [ ] Testes E2E com Playwright/Cypress
 - [ ] CI/CD com GitHub Actions (lint → test → build → deploy)
+- [ ] Titles dinâmicos para cada página.
