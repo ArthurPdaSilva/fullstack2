@@ -19,7 +19,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider tokenProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = extractToken(request);
 
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            String userId = jwtTokenProvider.getUserIdFromToken(token);
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+            String userId = tokenProvider.getUserIdFromToken(token);
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userId, null, Collections.emptyList());

@@ -179,6 +179,10 @@ Usei inteligência artificial para otimizar o desenvolvimento das camadas de **r
 
 Optei por utilizar Docker para conteinerizar os serviços da aplicação, principalmente o PostgreSQL e o pgAdmin. Essa abordagem garante um ambiente de desenvolvimento consistente entre diferentes máquinas, reduzindo problemas relacionados à configuração do sistema operacional ou a diferenças de versões das ferramentas. Além de eliminar a necessidade de instalar e configurar manualmente o banco de dados e suas dependências em cada ambiente, o Docker simplifica a inicialização do projeto, bastando executar os containers necessários. Essa estratégia também facilita a integração futura com pipelines de CI/CD, tornando o processo de build, testes e deploy mais previsível e reproduzível.
 
+### Injeção de Dependência
+
+Pensando no crescimento do nosso sistema, vejo a injeção de dependência como um passo fundamental. Ela nos ajuda a manter um bom encapsulamento, garante que os contratos sejam seguidos à risca e dá aquela flexibilidade enorme para trocar uma classe por outra sempre que a gente precisar.
+
 
 ## 7. Melhorias e Roadmap
 

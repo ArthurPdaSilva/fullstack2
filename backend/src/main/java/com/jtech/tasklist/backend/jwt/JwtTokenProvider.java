@@ -10,7 +10,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-public class JwtTokenProvider {
+public class JwtTokenProvider implements TokenProvider {
 
     private final SecretKey secretKey;
     private final long accessTokenExpiration;

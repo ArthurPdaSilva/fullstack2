@@ -5,9 +5,10 @@ import com.jtech.tasklist.backend.auth.dto.LoginRequest;
 import com.jtech.tasklist.backend.auth.dto.RegisterRequest;
 import com.jtech.tasklist.backend.auth.repository.UserRepository;
 import com.jtech.tasklist.backend.auth.service.AuthService;
+import com.jtech.tasklist.backend.auth.service.AuthServiceImpl;
 import com.jtech.tasklist.backend.exception.BadRequestException;
 import com.jtech.tasklist.backend.exception.UnauthorizedException;
-import com.jtech.tasklist.backend.jwt.JwtTokenProvider;
+import com.jtech.tasklist.backend.jwt.TokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ class AuthServiceTest {
     private UserRepository userRepository;
 
     @Mock
-    private JwtTokenProvider jwtTokenProvider;
+    private TokenProvider tokenProvider;
 
     private PasswordEncoder passwordEncoder;
     private AuthService authService;
@@ -39,7 +40,7 @@ class AuthServiceTest {
     @BeforeEach
     void setUp() {
         passwordEncoder = new BCryptPasswordEncoder();
-        authService = new AuthService(userRepository, passwordEncoder, jwtTokenProvider);
+        authService = new AuthServiceImpl(userRepository, passwordEncoder, tokenProvider);
     }
 
     @Test
@@ -55,10 +56,10 @@ class AuthServiceTest {
         var request = new LoginRequest("john@email.com", "123456");
 
         when(userRepository.findByEmail("john@email.com")).thenReturn(Optional.of(user));
-        when(jwtTokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
-        when(jwtTokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
-        when(jwtTokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
-        when(jwtTokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
+        when(tokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
+        when(tokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
+        when(tokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
+        when(tokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
 
         var response = authService.login(request);
 
@@ -111,10 +112,10 @@ class AuthServiceTest {
 
         when(userRepository.existsByEmail("john@email.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
-        when(jwtTokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
-        when(jwtTokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
-        when(jwtTokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
-        when(jwtTokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
+        when(tokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
+        when(tokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
+        when(tokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
+        when(tokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
 
         var response = authService.register(request);
 
@@ -166,10 +167,10 @@ class AuthServiceTest {
 
         when(userRepository.existsByEmail("john@email.com")).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
-        when(jwtTokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
-        when(jwtTokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
-        when(jwtTokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
-        when(jwtTokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
+        when(tokenProvider.generateAccessToken(userId.toString())).thenReturn("access-token");
+        when(tokenProvider.generateRefreshToken(userId.toString())).thenReturn("refresh-token");
+        when(tokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
+        when(tokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
 
         var response = authService.register(request);
 

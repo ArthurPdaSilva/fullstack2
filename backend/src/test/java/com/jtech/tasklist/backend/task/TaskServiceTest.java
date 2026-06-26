@@ -7,6 +7,7 @@ import com.jtech.tasklist.backend.task.domain.Task;
 import com.jtech.tasklist.backend.task.dto.TaskRequest;
 import com.jtech.tasklist.backend.task.repository.TaskRepository;
 import com.jtech.tasklist.backend.task.service.TaskService;
+import com.jtech.tasklist.backend.task.service.TaskServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,7 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        taskService = new TaskService(taskRepository, userRepository);
+        taskService = new TaskServiceImpl(taskRepository, userRepository);
 
         userId = UUID.randomUUID();
         taskId = UUID.randomUUID();
