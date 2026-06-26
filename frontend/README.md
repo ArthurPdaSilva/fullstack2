@@ -157,7 +157,7 @@ Apesar de possuir maior experiência com React, optei por desenvolver o projeto 
 - [ ] Implementar refresh token automático (backend gera, frontend não consome)
 - [ ] Adicionar feedback visual (toast/snackbar) para operações CRUD
 - [ ] Adicionar loading skeleton nas telas
-- [ ] Dividir a tela de Login com a de registro
+- [ ] Dividir a tela de Login com a de Cadastro
 
 ### Médio prazo
 
@@ -173,4 +173,4 @@ Apesar de possuir maior experiência com React, optei por desenvolver o projeto 
 - [ ] Suporte a multi-idiomas (i18n)
 - [ ] Testes E2E com Playwright/Cypress
 - [ ] CI/CD com GitHub Actions (lint → test → build → deploy)
-- [ ] Titles dinâmicos para cada página.
+- [ ] Titles dinâmicos para cada página
