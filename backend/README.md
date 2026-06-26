@@ -2,7 +2,7 @@
 
 ## 1. Visão Geral da Arquitetura
 
-* Optou-se por não dar continuidade à arquitetura hexagonal proposta no template do projeto. A decisão foi baseada em dois fatores principais: os requisitos especificam explicitamente a utilização de **controllers**, **repository** e **service**, e eu tenho maior familiariedade com essa arquitetura. Dessa forma, a API segue uma arquitetura em camadas tradicional, organizada por domínio (`auth`, `task`), cada um com suas respectivas classes de controller, service, DTO, domain e repository.
+Eu optei por não dar continuidade à arquitetura hexagonal proposta no template do projeto. Pensei nisso por dois motivos: os requisitos pediam explicitamente **controllers**, **repository** e **service**, e eu tenho mais familiaridade com essa arquitetura em camadas. Organizei a API por domínio (`auth`, `task`), cada um com suas classes de controller, service, DTO, domain e repository.
 
 <!-- Descrever estrutura e decisões arquiteturais -->
 
@@ -165,5 +165,6 @@ Cada módulo de domínio segue uma arquitetura em camadas:
 ## 7. Melhorias e Roadmap
 
 * ### Logging para Observabilidade
+  Pretendo adicionar uma estratégia de logging estruturado para facilitar a observação da aplicação em produção.
 * ### Pipeline de CI/CD com GitHub Actions
-<!-- Propostas técnicas para evolução e escalabilidade -->
+  Penso em configurar uma pipeline de integração e deploy contínuo usando GitHub Actions.

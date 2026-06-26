@@ -2,6 +2,8 @@
 
 ## 1. Visão Geral da Arquitetura
 
+Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio da aplicação (`auth`, `tasklists`, `tasks`) é isolado em seu próprio módulo com componentes, store, views e tipos, o que facilita a manutenção e escalabilidade do código.
+
 ## 2. Stack Tecnológica
 
 ## 3. Como Rodar Localmente
@@ -107,11 +109,15 @@ Cada feature segue uma estrutura padronizada:
 
 ## 6. Decisões Técnicas Aprofundadas
 
+### Uso de IA no Desenvolvimento
+
+Usei inteligência artificial como apoio para o design visual e para reforçar a sintaxe do Vue 3 com Composition API, já que eu não tinha familiaridade com o ecossistema. A IA me ajudou a acelerar a prototipagem do layout com Vuetify e a escrever código seguindo boas práticas. Todo o código gerado foi revisado e adaptado por mim para garantir que atendesse aos requisitos do projeto.
+
 ## 7. Melhorias e Roadmap
 
 ### Cache de Requisições
 
-Implementar uma camada de cache para requisições HTTP usando bibliotecas como **TanStack Query**. Isso traria:
+Penso em implementar uma camada de cache para requisições HTTP usando **TanStack Query**. Isso traria:
 
 - Deduplicação automática de requisições concorrentes
 - Cache em memória com stale-while-revalidate
@@ -120,7 +126,7 @@ Implementar uma camada de cache para requisições HTTP usando bibliotecas como 
 
 ### Testes E2E com Playwright
 
-Adicionar testes end-to-end com **Playwright** para cobrir fluxos críticos:
+Pretendo adicionar testes end-to-end com **Playwright** para cobrir fluxos críticos:
 
 - Autenticação (login/logout)
 - CRUD completo de listas e tarefas
