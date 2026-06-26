@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
                 description = "API for task management with JWT authentication",
                 version = "1.0.0",
                 contact = @Contact(name = "JTech Solucoes em Informatica")),
-        servers = @Server(url = "http://localhost:5050", description = "Local"))
+        servers = @Server(url = "http://localhost:8000", description = "Local"))
 public class OpenApiConfig {
 
     @Bean
