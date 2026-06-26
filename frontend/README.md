@@ -149,6 +149,6 @@ Penso em implementar uma camada de cache para requisições HTTP usando **TanSta
 Pretendo adicionar testes end-to-end com **Playwright** para cobrir fluxos críticos:
 
 - Autenticação (login/logout)
-- CRUD completo de listas e tarefas
+- CRUD completo de usuários, listas e tarefas
 - Persistência entre recarregamentos de página
 - Responsividade nos diferentes breakpoints
