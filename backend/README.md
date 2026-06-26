@@ -4,7 +4,12 @@
 
 Eu optei por não dar continuidade à arquitetura hexagonal proposta no template do projeto. Pensei nisso por dois motivos: os requisitos pediam explicitamente **controllers**, **repository** e **service**, e eu tenho mais familiaridade com essa arquitetura em camadas. Organizei a API por domínio (`auth`, `task`), cada um com suas classes de controller, service, DTO, domain e repository.
 
-<!-- Descrever estrutura e decisões arquiteturais -->
+**Princípios arquiteturais:**
+
+- Arquitetura em camadas por domínio (controller → service → repository)
+- Tratamento global de exceções com `@RestControllerAdvice`
+- Documentação automática com SpringDoc OpenAPI
+- Containerização via Docker Compose (app + PostgreSQL + pgAdmin)
 
 ## 2. Stack Tecnológica
 
