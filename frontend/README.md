@@ -133,6 +133,10 @@ Cada feature segue uma estrutura padronizada:
 
 Usei inteligência artificial como apoio para o design visual e para reforçar a sintaxe do Vue 3 com Composition API, já que eu não tinha familiaridade com o ecossistema. A IA me ajudou a acelerar a prototipagem do layout com Vuetify e a escrever código seguindo boas práticas. Todo o código gerado foi revisado e adaptado por mim para garantir que atendesse aos requisitos do projeto.
 
+### ESLint + Prettier vs Biome
+
+Mantive o **ESLint** e **Prettier** por já estarem configurados no template inicial do projeto. Porém, reconheço que o **Biome** tem vantagens significativas: unifica linting e formatação em uma única ferramenta, é mais rápido por ser escrito em Rust, e tem configuração mais simples (arquivo único, zero plugins).
+
 ## 7. Melhorias e Roadmap
 
 ### Cache de Requisições
@@ -152,3 +156,7 @@ Pretendo adicionar testes end-to-end com **Playwright** para cobrir fluxos crít
 - CRUD completo de usuários, listas e tarefas
 - Persistência entre recarregamentos de página
 - Responsividade nos diferentes breakpoints
+
+### Migração para Biome
+
+Substituir ESLint + Prettier pelo **Biome**, unificando lint e formatação em uma ferramenta só, eliminando a complexidade de manter múltiplos arquivos de configuração e plugins.
