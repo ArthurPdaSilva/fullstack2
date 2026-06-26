@@ -70,7 +70,7 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
    | `POSTGRES_PASSWORD`        | `tasklist`                                                   | Senha do PostgreSQL        |
    | `POSTGRES_DB`              | `tasklist`                                                   | Nome do banco de dados     |
    | `JWT_SECRET`               | `ZGV2LXNlY3JldC1rZXkt...`                                   | Chave secreta para JWT     |
-   | `PGADMIN_DEFAULT_EMAIL`    | `admin@jtech.com.br`                                         | Email do pgAdmin           |
+   | `PGADMIN_DEFAULT_EMAIL`    | `example@jtech.com.br`                                         | Email do pgAdmin           |
    | `PGADMIN_DEFAULT_PASSWORD` | `admin`                                                      | Senha do pgAdmin           |
 
 3. Execute o ambiente:
@@ -79,7 +79,7 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
    ```
 4. A API estará disponível em [http://localhost:8000](http://localhost:8000)
 5. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
-6. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`)
+6. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `example@jtech.com.br` / senha: `admin`)
 
 ## 4. Como Rodar os Testes
 
