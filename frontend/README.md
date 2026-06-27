@@ -13,22 +13,22 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 
 ## 2. Stack Tecnológica
 
-| Tecnologia        | Finalidade                                     |
-| ----------------- | ---------------------------------------------- |
-| Vue 3             | Framework frontend (Composition API)           |
-| TypeScript        | Superset tipado para JavaScript                |
-| Vite              | Build tool e dev server                        |
-| Pinia             | Gerenciamento de estado                        |
-| Vue Router        | Roteamento SPA                                 |
-| Vuetify 3         | Biblioteca de componentes UI (Material Design) |
-| Axios             | Cliente HTTP para requisições à API            |
-| Vitest            | Testes unitários                               |
-| Vue Test Utils    | Utilitários para testes de componentes         |
-| Vue-TSC           | Type-checking para Vue SFCs                    |
-| ESLint + Prettier | Linter e formatador de código                  |
-| jsdom             | Simulação de DOM para testes                   |
-| @mdi/font         | Ícones Material Design                         |
-| Docker / Docker Compose | Containerização e ambiente local          |
+| Tecnologia              | Finalidade                                     |
+| ----------------------- | ---------------------------------------------- |
+| Vue 3                   | Framework frontend (Composition API)           |
+| TypeScript              | Superset tipado para JavaScript                |
+| Vite                    | Build tool e dev server                        |
+| Pinia                   | Gerenciamento de estado                        |
+| Vue Router              | Roteamento SPA                                 |
+| Vuetify 3               | Biblioteca de componentes UI (Material Design) |
+| Axios                   | Cliente HTTP para requisições à API            |
+| Vitest                  | Testes unitários                               |
+| Vue Test Utils          | Utilitários para testes de componentes         |
+| Vue-TSC                 | Type-checking para Vue SFCs                    |
+| ESLint + Prettier       | Linter e formatador de código                  |
+| jsdom                   | Simulação de DOM para testes                   |
+| @mdi/font               | Ícones Material Design                         |
+| Docker / Docker Compose | Containerização e ambiente local               |
 
 ## 3. Como Rodar
 
@@ -164,6 +164,10 @@ Usei inteligência artificial como apoio para o design visual e para reforçar a
 ### Uso do Docker
 
 Optei por containerizar também o frontend com Docker, seguindo a mesma abordagem do backend. O Dockerfile utiliza um build multi-stage: a primeira etapa compila a aplicação Vue com Vite em um container Node.js, e a segunda etapa serve os arquivos estáticos com Nginx, resultando em uma imagem leve e otimizada para produção. O docker-compose na raiz do projeto orquestra todos os serviços (PostgreSQL, API Spring Boot, pgAdmin e frontend), permitindo subir o ambiente completo com um único comando. Essa estratégia garante consistência entre ambientes de desenvolvimento e produção, além de facilitar a integração com pipelines de CI/CD.
+
+### Implementação da Autenticação
+
+Apesar de o sistema de login ser um requisito mockado, optei por implementá-lo de forma completa no frontend (com exceção do refresh token). Isso faz mais sentido para testar as rotas de login e register exigidas como requisitos no backend, garantindo que a integração entre o usuário da sessão e as tasks ocorra sem erros de segurança ou problemas de persistência.
 
 ### ESLint + Prettier vs Biome
 
