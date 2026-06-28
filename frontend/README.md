@@ -36,27 +36,32 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 
 **Pré-requisitos:** Node.js 18+, npm (ou pnpm/yarn).
 
-1. Acesse a pasta do frontend:
+1. Copie o arquivo de ambiente de exemplo:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Acesse a pasta do frontend:
 
    ```bash
    cd frontend
    ```
 
-2. Instale as dependências:
+3. Instale as dependências:
 
    ```bash
    npm install
    ```
 
-3. Inicie o servidor de desenvolvimento:
+4. Inicie o servidor de desenvolvimento:
 
    ```bash
    npm run dev
    ```
 
-4. A aplicação estará disponível em [http://localhost:5173](http://localhost:5173)
+5. A aplicação estará disponível em [http://localhost:5173](http://localhost:5173)
 
-5. (Opcional) Para build de produção:
+6. (Opcional) Para build de produção:
    ```bash
    npm run build
    ```

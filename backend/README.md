@@ -38,17 +38,21 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 **Pré-requisitos:** Java 17, Maven (ou o Maven Wrapper `./mvnw`), PostgreSQL 16 rodando.
 
 1. Clone o repositório e acesse a pasta `backend/`
-2. Crie um banco PostgreSQL (padrão: `tasklist`) ou configure via variáveis de ambiente
-3. Configure as variáveis de ambiente abaixo (ou edite o arquivo `.env`):
+2. Copie o arquivo de ambiente de exemplo e ajuste se necessário:
+   ```bash
+   cp .env.example .env
+   ```
+3. (Opcional) Crie um banco PostgreSQL ou mantenha o configurado no `.env` (`tasklist`)
+   As variáveis do `.env` (já com valores padrão no `application.properties`):
 
-   | Variável     | Padrão       | Descrição                    |
-   |--------------|--------------|------------------------------|
-   | `DB_HOST`    | `localhost`  | Host do PostgreSQL           |
-   | `DB_PORT`    | `5432`       | Porta do PostgreSQL          |
-   | `DB_NAME`    | `tasklist`   | Nome do banco de dados       |
-   | `DB_USER`    | `postgres`   | Usuário do banco             |
-   | `DB_PASS`    | `postgres`   | Senha do banco               |
-   | `JWT_SECRET` | *(default)*  | Chave secreta para JWT       |
+   | Variável                   | Padrão       | Descrição                    |
+   |----------------------------|--------------|------------------------------|
+   | `POSTGRES_USER`            | `tasklist`   | Usuário do PostgreSQL        |
+   | `POSTGRES_PASSWORD`        | `tasklist`   | Senha do PostgreSQL          |
+   | `POSTGRES_DB`              | `tasklist`   | Nome do banco de dados       |
+   | `DB_HOST`                  | `localhost`  | Host do PostgreSQL           |
+   | `DB_PORT`                  | `5432`       | Porta do PostgreSQL          |
+   | `JWT_SECRET`               | *(default)*  | Chave secreta para JWT       |
 
 4. Execute a aplicação:
    ```bash
@@ -61,14 +65,21 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 
 **Pré-requisitos:** Docker e Docker Compose.
 
-1. Na raiz do projeto, configure o arquivo `backend/.env` com as seguintes variáveis:
+1. Copie o arquivo de ambiente de exemplo e ajuste se necessário:
+   ```bash
+   cp backend/.env.example backend/.env
+   ```
+
+   As seguintes variáveis estão disponíveis:
 
    | Variável                   | Exemplo                                                      | Descrição                  |
    |----------------------------|--------------------------------------------------------------|----------------------------|
    | `POSTGRES_USER`            | `tasklist`                                                   | Usuário do PostgreSQL      |
    | `POSTGRES_PASSWORD`        | `tasklist`                                                   | Senha do PostgreSQL        |
    | `POSTGRES_DB`              | `tasklist`                                                   | Nome do banco de dados     |
-   | `JWT_SECRET`               | `ZGV2LXNlY3JldC1rZXkt...`                                   | Chave secreta para JWT     |
+   | `DB_HOST`                  | `localhost`                                                  | Host do PostgreSQL         |
+   | `DB_PORT`                  | `5432`                                                       | Porta do PostgreSQL        |
+   | `JWT_SECRET`               | `example_secret_key`                                         | Chave secreta para JWT     |
    | `PGADMIN_DEFAULT_EMAIL`    | `admin@jtech.com.br`                                         | Email do pgAdmin           |
    | `PGADMIN_DEFAULT_PASSWORD` | `admin`                                                      | Senha do pgAdmin           |
 

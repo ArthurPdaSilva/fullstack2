@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:16
+    env_file: ./backend/.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-tasklist}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tasklist}
