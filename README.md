@@ -116,7 +116,8 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
    | API (Spring Boot) | [http://localhost:8000](http://localhost:8000) |
    | Swagger UI | [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html) |
    | Frontend (Vue 3) | [http://localhost:5173](http://localhost:5173) |
-   | pgAdmin | [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`) |
+    | pgAdmin | [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`) |
+    | | **Importante:** ao conectar no PostgreSQL pelo pgAdmin, use `db` como host (nome do serviço no Docker), não `localhost`. |
 
 ### Opção 2: Manual (backend + frontend separados)
 
@@ -328,6 +329,9 @@ fullstack2/
 │       │   │   │   ├── SecurityConfig.java            # Spring Security (permits /auth/**, JWTAuthFilter)
 │       │   │   │   └── WebConfig.java                 # CORS (frontend em localhost:5173)
 │       │   │   │
+│       │   │   ├── health/
+│       │   │   │   └── HealthController.java           # GET /health
+│       │   │   │
 │       │   │   ├── exception/
 │       │   │   │   ├── AccessDeniedException.java     # 403 — acesso negado a recurso de outro usuário
 │       │   │   │   ├── ApiError.java                  # Modelo de erro padronizado
@@ -351,6 +355,8 @@ fullstack2/
 │           │   │   └── AuthServiceTest.java
 │           │   ├── exception/
 │           │   │   └── GlobalExceptionHandlerTest.java
+│           │   ├── health/
+│           │   │   └── HealthControllerTest.java
 │           │   ├── integration/
 │           │   │   ├── AuthControllerTest.java
 │           │   │   ├── TaskControllerTest.java
@@ -474,6 +480,8 @@ Documentei todos os endpoints da API com `@Operation` (summary + description) e 
 - **403 Forbidden** — Tentativa de acessar recurso de outro usuário
 - **404 Not Found** — Recurso não encontrado
 - **500 Internal Server Error** — Erro inesperado (genérico, não documentado por endpoint)
+
+Também criei o endpoint `GET /health` (público, sem autenticação) que retorna `{"status":"UP"}` — útil para health checks de load balancers e orquestradores.
 
 Usei `@Content(schema = @Schema(implementation = ApiError.class))` em todas as respostas de erro para que o Swagger exiba o modelo padronizado com `status`, `timestamp`, `message` e opcionalmente `errors`. O `401` para JWT ausente/inválido não precisa ser documentado por endpoint porque o `SecurityScheme` bearer já está configurado globalmente no `OpenApiConfig` e o Swagger já adiciona o cadeado automaticamente.
 
