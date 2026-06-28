@@ -91,8 +91,14 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 2. Copie os arquivos de ambiente de exemplo:
 
    ```bash
-   cp backend/.env.example backend/.env
-   cp frontend/.env.example frontend/.env
+   # Linux / macOS
+   cp backend/.env.example backend/.env && cp frontend/.env.example frontend/.env
+
+   # Windows (Command Prompt)
+   copy backend\.env.example backend\.env && copy frontend\.env.example frontend\.env
+
+   # Windows (PowerShell)
+   Copy-Item backend\.env.example backend\.env; Copy-Item frontend\.env.example frontend\.env
    ```
 
    Os valores padrão já funcionam para o Docker Compose.
@@ -122,7 +128,16 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 
    ```bash
    cd backend
+   ```
+   ```bash
+   # Linux / macOS
    cp .env.example .env
+
+   # Windows (Command Prompt)
+   copy .env.example .env
+
+   # Windows (PowerShell)
+   Copy-Item .env.example .env
    ```
 
 2. Ajuste as variáveis no `.env` conforme seu ambiente:
@@ -157,7 +172,14 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 2. Copie o `.env`:
 
    ```bash
+   # Linux / macOS
    cp .env.example .env
+
+   # Windows (Command Prompt)
+   copy .env.example .env
+
+   # Windows (PowerShell)
+   Copy-Item .env.example .env
    ```
 
    A única variável é `VITE_API_BASE_URL=http://localhost:8000`.
@@ -439,6 +461,21 @@ Pensando no crescimento do sistema, vejo a injeção de dependência como um pas
 ### Implementação da Autenticação
 
 Apesar de o sistema de login ser originalmente um requisito mockado no frontend, implementei ele de forma completa — com comunicação real com o backend via `/auth/login` e `/auth/register`. Isso garante que a integração entre o usuário da sessão e as tasks ocorra sem erros de segurança ou problemas de persistência. O backend usa BCrypt para hash de senhas e gera tokens de acesso (15 min) e refresh (7 dias) via JJWT.
+
+### Documentação da API com Swagger / OpenAPI
+
+Documentei todos os endpoints da API com `@Operation` (summary + description) e `@ApiResponse` para cada código de resposta possível, seguindo um padrão consistente:
+
+- **200 OK** — Operação bem-sucedida com corpo de resposta
+- **201 Created** — Recurso criado (POST /tasks, POST /tasklists)
+- **204 No Content** — Recurso excluído (DELETE)
+- **400 Bad Request** — Erro de validação (@Valid), e-mail duplicado, UUID inválido ou refresh token em branco
+- **401 Unauthorized** — Credenciais inválidas ou token expirado/inválido (JWT ou refresh)
+- **403 Forbidden** — Tentativa de acessar recurso de outro usuário
+- **404 Not Found** — Recurso não encontrado
+- **500 Internal Server Error** — Erro inesperado (genérico, não documentado por endpoint)
+
+Usei `@Content(schema = @Schema(implementation = ApiError.class))` em todas as respostas de erro para que o Swagger exiba o modelo padronizado com `status`, `timestamp`, `message` e opcionalmente `errors`. O `401` para JWT ausente/inválido não precisa ser documentado por endpoint porque o `SecurityScheme` bearer já está configurado globalmente no `OpenApiConfig` e o Swagger já adiciona o cadeado automaticamente.
 
 ### Refresh Token Automático
 

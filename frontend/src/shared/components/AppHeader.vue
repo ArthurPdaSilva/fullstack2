@@ -9,6 +9,11 @@ function logout() {
   authStore.logout()
   router.push({ name: 'login' })
 }
+
+function capitalize(name: string | null | undefined): string {
+  if (!name) return ''
+  return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+}
 </script>
 
 <template>
@@ -25,7 +30,7 @@ function logout() {
           {{ authStore.user?.name?.charAt(0).toUpperCase() }}
         </span>
       </v-avatar>
-      <span class="text-body-2 mr-4 text-medium-emphasis">{{ authStore.user?.name }}</span>
+      <span class="text-body-2 mr-4 text-medium-emphasis">{{ capitalize(authStore.user?.name) }}</span>
     </div>
     <v-btn icon variant="text" color="grey-darken-1" @click="logout" title="Sair">
       <v-icon>mdi-logout</v-icon>
