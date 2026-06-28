@@ -44,6 +44,9 @@ async function handleSubmit() {
 
 function toggleMode() {
   isRegister.value = !isRegister.value
+  name.value = ''
+  email.value = ''
+  password.value = ''
   error.value = ''
 }
 </script>
@@ -86,7 +89,7 @@ function toggleMode() {
         required
       />
 
-      <v-alert v-if="error" type="error" class="mb-3" closable variant="tonal">
+      <v-alert v-if="error" type="error" class="my-4" closable variant="tonal">
         {{ error }}
       </v-alert>
 

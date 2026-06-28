@@ -45,11 +45,14 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 | | Spring Data JPA / Hibernate | — | ORM e persistência |
 | | Spring Security | — | Autenticação e autorização |
 | | Spring Validation | — | Validação de requisições |
+| | Spring Boot Actuator | — | Monitoramento e health check |
+| | Spring Boot DevTools | — | Auto-restart e live-reload em desenvolvimento |
 | **Banco de Dados** | PostgreSQL | 16 | Banco relacional (produção) |
 | | H2 Database | — | Banco em memória (testes) |
 | **Segurança** | JJWT (io.jsonwebtoken) | 0.12.6 | Geração e validação de tokens JWT |
 | | BCrypt | — | Hash seguro de senhas |
 | **Boilerplate** | Lombok | 1.18.36 | Redução de código repetitivo |
+| | spring-dotenv | 4.0.0 | Carregamento automático de `.env` |
 | **Documentação API** | SpringDoc OpenAPI | 2.6.0 | Swagger UI automático |
 | **Testes (backend)** | JUnit 5 | — | Framework de testes unitários |
 | | Mockito | — | Mocks e isolamento de dependências |
@@ -150,7 +153,9 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
    | `POSTGRES_DB` | Nome do banco | `tasklist` |
    | `DB_HOST` | Host do PostgreSQL | `localhost` |
    | `DB_PORT` | Porta do PostgreSQL | `5432` |
-   | `JWT_SECRET` | Chave secreta para JWT | (gerada no exemplo) |
+    | `JWT_SECRET` | Chave secreta para JWT | (gerada no exemplo) |
+
+   > O Spring Boot carrega automaticamente as variáveis do arquivo `.env` via `spring-dotenv`. Não é necessário exportá-las manualmente no terminal.
 
 3. Execute a aplicação:
 
@@ -459,6 +464,10 @@ Usei inteligência artificial para otimizar o desenvolvimento das camadas de **r
 ### Uso do Docker
 
 Optei por containerizar todos os serviços com Docker. O `docker-compose.yml` na raiz orquestra quatro serviços: PostgreSQL 16, a API Spring Boot, pgAdmin e o frontend Vue.js. O frontend utiliza um build multi-stage (Node.js para compilação → Nginx para servir os arquivos estáticos), resultando em uma imagem leve e otimizada para produção. Essa abordagem garante um ambiente de desenvolvimento consistente entre diferentes máquinas, eliminando a necessidade de instalar e configurar manualmente cada ferramenta.
+
+### Leitura Automática do .env (spring-dotenv)
+
+Adicionei a dependência `me.paulschwarz:spring-dotenv` para que o Spring Boot carregue automaticamente as variáveis do arquivo `.env` na raiz do projeto ao executar localmente com `./mvnw spring-boot:run`. Sem essa biblioteca, os placeholders `${JWT_SECRET}`, `${DB_HOST}`, etc. não seriam resolvidos fora do Docker Compose (que já carrega o `.env` via `env_file:`). A biblioteca lê o arquivo `.env` durante a inicialização da aplicação e expõe as variáveis para o `application.properties`, sem necessidade de export manual ou scripts adicionais.
 
 ### Injeção de Dependência (Backend)
 
