@@ -43,6 +43,16 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void handleAccessDenied_ShouldReturn403() {
+        var ex = new AccessDeniedException("Forbidden");
+        ResponseEntity<ApiError> response = handler.handleAccessDenied(ex);
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals(403, Objects.requireNonNull(response.getBody()).getStatus());
+        assertEquals("Forbidden", response.getBody().getMessage());
+    }
+
+    @Test
     void handleUnauthorized_ShouldReturn401() {
         var ex = new UnauthorizedException("Access denied");
         ResponseEntity<ApiError> response = handler.handleUnauthorized(ex);

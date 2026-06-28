@@ -1,8 +1,13 @@
 package com.jtech.tasklist.backend.task.controller;
 
+import com.jtech.tasklist.backend.exception.ApiError;
 import com.jtech.tasklist.backend.task.dto.TaskRequest;
 import com.jtech.tasklist.backend.task.dto.TaskResponse;
 import com.jtech.tasklist.backend.task.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,6 +39,12 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get task by ID", description = "Returns a task by its ID if it belongs to the authenticated user")
+    @ApiResponse(responseCode = "200", description = "Task found")
+    @ApiResponse(responseCode = "403", description = "Access denied – task belongs to another user",
+                 content = @Content(schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(responseCode = "404", description = "Task not found",
+                 content = @Content(schema = @Schema(implementation = ApiError.class)))
     public ResponseEntity<TaskResponse> findById(@PathVariable UUID id,
                                                   Authentication authentication) {
         var response = taskService.findByIdAndUserId(id, authentication.getName());

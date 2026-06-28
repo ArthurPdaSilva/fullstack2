@@ -2,6 +2,7 @@ package com.jtech.tasklist.backend.task;
 
 import com.jtech.tasklist.backend.auth.domain.User;
 import com.jtech.tasklist.backend.auth.repository.UserRepository;
+import com.jtech.tasklist.backend.exception.AccessDeniedException;
 import com.jtech.tasklist.backend.exception.ResourceNotFoundException;
 import com.jtech.tasklist.backend.task.domain.Task;
 import com.jtech.tasklist.backend.task.dto.TaskRequest;
@@ -101,7 +102,7 @@ class TaskServiceTest {
 
     @Test
     void findByIdAndUserId_ShouldReturnTask_WhenOwnershipValid() {
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
 
         var response = taskService.findByIdAndUserId(taskId, userId.toString());
 
@@ -111,17 +112,26 @@ class TaskServiceTest {
 
     @Test
     void findByIdAndUserId_ShouldThrowException_WhenTaskNotFound() {
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.empty());
+        when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> taskService.findByIdAndUserId(taskId, userId.toString()));
     }
 
     @Test
+    void findByIdAndUserId_ShouldThrowAccessDenied_WhenTaskBelongsToAnotherUser() {
+        var otherUserId = UUID.randomUUID();
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+
+        assertThrows(AccessDeniedException.class,
+                () -> taskService.findByIdAndUserId(taskId, otherUserId.toString()));
+    }
+
+    @Test
     void update_ShouldReturnUpdatedTask() {
         var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
 
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
 
         var response = taskService.update(taskId, updateRequest, userId.toString());
@@ -136,7 +146,7 @@ class TaskServiceTest {
     void update_ShouldThrowException_WhenTaskNotFound() {
         var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
 
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.empty());
+        when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> taskService.update(taskId, updateRequest, userId.toString()));
@@ -144,8 +154,20 @@ class TaskServiceTest {
     }
 
     @Test
+    void update_ShouldThrowAccessDenied_WhenTaskBelongsToAnotherUser() {
+        var otherUserId = UUID.randomUUID();
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
+
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+
+        assertThrows(AccessDeniedException.class,
+                () -> taskService.update(taskId, updateRequest, otherUserId.toString()));
+        verify(taskRepository, never()).save(any(Task.class));
+    }
+
+    @Test
     void delete_ShouldRemoveTask_WhenOwnershipValid() {
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
 
         taskService.delete(taskId, userId.toString());
 
@@ -154,10 +176,21 @@ class TaskServiceTest {
 
     @Test
     void delete_ShouldThrowException_WhenTaskNotFound() {
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.empty());
+        when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> taskService.delete(taskId, userId.toString()));
+        verify(taskRepository, never()).delete(any(Task.class));
+    }
+
+    @Test
+    void delete_ShouldThrowAccessDenied_WhenTaskBelongsToAnotherUser() {
+        var otherUserId = UUID.randomUUID();
+
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+
+        assertThrows(AccessDeniedException.class,
+                () -> taskService.delete(taskId, otherUserId.toString()));
         verify(taskRepository, never()).delete(any(Task.class));
     }
 
@@ -188,7 +221,7 @@ class TaskServiceTest {
         task.setCompleted(true);
         var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
 
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
 
         var response = taskService.update(taskId, updateRequest, userId.toString());
@@ -202,7 +235,7 @@ class TaskServiceTest {
         task.setCompleted(true);
         var updateRequest = new TaskRequest("Updated Title", "Updated Description", false);
 
-        when(taskRepository.findByIdAndUserId(taskId, userId)).thenReturn(Optional.of(task));
+        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
 
         var response = taskService.update(taskId, updateRequest, userId.toString());

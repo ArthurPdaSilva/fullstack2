@@ -2,6 +2,7 @@ package com.jtech.tasklist.backend.task.service;
 
 import com.jtech.tasklist.backend.auth.domain.User;
 import com.jtech.tasklist.backend.auth.repository.UserRepository;
+import com.jtech.tasklist.backend.exception.AccessDeniedException;
 import com.jtech.tasklist.backend.exception.ResourceNotFoundException;
 import com.jtech.tasklist.backend.exception.UnauthorizedException;
 import com.jtech.tasklist.backend.task.domain.Task;
@@ -48,15 +49,24 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional(readOnly = true)
     public TaskResponse findByIdAndUserId(UUID taskId, String userId) {
-        var task = taskRepository.findByIdAndUserId(taskId, UUID.fromString(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found or access denied"));
+        var task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+
+        if (!task.getUser().getId().equals(UUID.fromString(userId))) {
+            throw new AccessDeniedException("You do not have permission to access this task");
+        }
+
         return TaskResponse.fromEntity(task);
     }
 
     @Transactional
     public TaskResponse update(UUID taskId, TaskRequest request, String userId) {
-        var task = taskRepository.findByIdAndUserId(taskId, UUID.fromString(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found or access denied"));
+        var task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+
+        if (!task.getUser().getId().equals(UUID.fromString(userId))) {
+            throw new AccessDeniedException("You do not have permission to access this task");
+        }
 
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
@@ -68,8 +78,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Transactional
     public void delete(UUID taskId, String userId) {
-        var task = taskRepository.findByIdAndUserId(taskId, UUID.fromString(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("Task not found or access denied"));
+        var task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+
+        if (!task.getUser().getId().equals(UUID.fromString(userId))) {
+            throw new AccessDeniedException("You do not have permission to access this task");
+        }
+
         taskRepository.delete(task);
     }
 }
