@@ -49,22 +49,18 @@ describe('TaskItem', () => {
 
   it('emits edit event when edit button is clicked', async () => {
     const wrapper = mountTaskItem(baseTask)
-    const buttons = wrapper.findAllComponents({ name: 'v-btn' })
-    const editBtn = buttons.find((b) => b.text() === '')
-    if (editBtn) {
-      await editBtn.trigger('click')
-    } else {
-      const editIcon = wrapper.findComponent({ name: 'v-icon' })
-      await editIcon.trigger('click')
-    }
+    const editBtn = wrapper.findAllComponents({ name: 'v-btn' }).at(0)
+    await editBtn!.trigger('click')
+    expect(wrapper.emitted('edit')).toBeTruthy()
+    expect(wrapper.emitted('edit')![0]).toEqual([baseTask])
   })
 
   it('emits delete event when delete button is clicked', async () => {
     const wrapper = mountTaskItem(baseTask)
     const deleteBtn = wrapper.findAllComponents({ name: 'v-btn' }).at(-1)
-    if (deleteBtn) {
-      await deleteBtn.trigger('click')
-    }
+    await deleteBtn!.trigger('click')
+    expect(wrapper.emitted('delete')).toBeTruthy()
+    expect(wrapper.emitted('delete')![0]).toEqual([baseTask.id])
   })
 
   it('applies completed class when task is completed', () => {

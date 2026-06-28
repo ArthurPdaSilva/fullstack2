@@ -469,6 +469,15 @@ Mantive o **ESLint** e **Prettier** por já estarem configurados no template ini
 
 Apesar de possuir maior experiência com React, optei por desenvolver o projeto em Vue.js por uma decisão estratégica — os projetos futuros utilizarão Vue.js como principal tecnologia no front-end. Embora minha experiência prática com Vue fosse menor, eu já possuía uma base acadêmica sobre o framework, o que facilitou o aprendizado. A Composition API do Vue 3 é bem parecida com hooks do React, o que ajudou na adaptação.
 
+### CI/CD com GitHub Actions
+
+Configurei um pipeline de integração contínua no GitHub Actions (`.github/workflows/ci.yml`) para validar automaticamente todo código enviado para a `main` ou em pull requests. O pipeline tem dois jobs executados em paralelo:
+
+- **Backend**: JDK 17 (temurin) com cache Maven — roda `./mvnw test` (todos os testes unitários e de integração com H2) e depois `./mvnw package -DskipTests` para verificar o build. Nenhum banco externo é necessário porque os testes usam H2 em memória.
+- **Frontend**: Node.js 20 com cache NPM — executa `npm ci`, `npm run lint`, `npm run type-check`, `npm run test:unit` e `npm run build-only` nessa ordem, garantindo que linting, tipos, testes e build estejam todos verdes.
+
+Optei por manter apenas a **validação** sem deploy automático por enquanto — o pipeline falha se algo quebrar, mas a publicação continua sendo manual. Isso evita expor credenciais de deploy desnecessariamente e mantém o controle sobre quando e como publicar.
+
 ---
 
 ## 7. Melhorias e Roadmap
