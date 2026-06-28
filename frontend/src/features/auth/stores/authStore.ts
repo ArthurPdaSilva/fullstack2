@@ -2,6 +2,7 @@ import api from '@/services/api'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import { useListStore } from '@/features/tasklists/stores/listStore'
+import type { PersistenceOptions } from 'pinia-plugin-persistedstate'
 import type { AuthResponse, LoginPayload, RegisterPayload, User } from '../types'
 
 function readRefreshToken(): string | null {
@@ -100,6 +101,6 @@ export const useAuthStore = defineStore(
       key: 'auth',
       storage: localStorage,
       pick: ['user', 'token'],
-    },
+    } satisfies PersistenceOptions,
   },
 )
