@@ -269,6 +269,7 @@ npm run format        # Prettier — formatação de código
 | `npm run type-check` | Type-checking com vue-tsc |
 | `npm run lint` | Linting com ESLint (autofix) |
 | `npm run format` | Formatação com Prettier |
+| `npm run build-only` | Build de produção (apenas Vite, sem type-check) |
 
 **Suites de teste (9 spec files):**
 
@@ -359,7 +360,7 @@ fullstack2/
 │       │   │   ├── config/
 │       │   │   │   ├── OpenApiConfig.java             # Configuração Swagger (bearer token)
 │       │   │   │   ├── SecurityConfig.java            # Spring Security (permits /auth/**, JWTAuthFilter)
-│       │   │   │   └── WebConfig.java                 # CORS (frontend em localhost:5173)
+│       │   │   │   └── WebConfig.java                 # CORS (permissivo em desenvolvimento)
 │       │   │   │
 │       │   │   ├── health/
 │       │   │   │   └── HealthController.java           # GET /health
