@@ -16,4 +16,4 @@ fullstack2/
 └── EXPLANATION.md  # Enunciado original do desafio
 ```
 
-Para mais detalhes, acesse o README de cada projeto acima.
+📖 [**EXPLANATION.md**](EXPLANATION.md) — Enunciado original e requisitos completos do desafio.
