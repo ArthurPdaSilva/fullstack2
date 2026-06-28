@@ -65,7 +65,7 @@ describe('LoginForm', () => {
   it('clears error when toggling modes', async () => {
     const wrapper = mountLoginForm()
 
-    wrapper.vm.error = 'Credenciais inválidas'
+    ;(wrapper.vm as unknown as { error: string }).error = 'Credenciais inválidas'
     await wrapper.vm.$nextTick()
 
     expect(wrapper.find('.v-alert').exists()).toBe(true)
