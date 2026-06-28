@@ -43,16 +43,16 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
    cp .env.example .env
    ```
 3. (Opcional) Crie um banco PostgreSQL ou mantenha o configurado no `.env` (`tasklist`)
-   As variáveis do `.env` (já com valores padrão no `application.properties`):
+   As variáveis do `.env`:
 
-   | Variável                   | Padrão       | Descrição                    |
-   |----------------------------|--------------|------------------------------|
-   | `POSTGRES_USER`            | `tasklist`   | Usuário do PostgreSQL        |
-   | `POSTGRES_PASSWORD`        | `tasklist`   | Senha do PostgreSQL          |
-   | `POSTGRES_DB`              | `tasklist`   | Nome do banco de dados       |
-   | `DB_HOST`                  | `localhost`  | Host do PostgreSQL           |
-   | `DB_PORT`                  | `5432`       | Porta do PostgreSQL          |
-   | `JWT_SECRET`               | *(default)*  | Chave secreta para JWT       |
+   | Variável                   | Descrição                    |
+   |----------------------------|------------------------------|
+   | `POSTGRES_USER`            | Usuário do PostgreSQL        |
+   | `POSTGRES_PASSWORD`        | Senha do PostgreSQL          |
+   | `POSTGRES_DB`              | Nome do banco de dados       |
+   | `DB_HOST`                  | Host do PostgreSQL           |
+   | `DB_PORT`                  | Porta do PostgreSQL          |
+   | `JWT_SECRET`               | Chave secreta para JWT       |
 
 4. Execute a aplicação:
    ```bash
@@ -60,37 +60,6 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
    ```
 5. A API estará disponível em [http://localhost:8000](http://localhost:8000)
 6. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
-
-## 3.2 Como Rodar com Docker
-
-**Pré-requisitos:** Docker e Docker Compose.
-
-1. Copie o arquivo de ambiente de exemplo e ajuste se necessário:
-   ```bash
-   cp backend/.env.example backend/.env
-   ```
-
-   As seguintes variáveis estão disponíveis:
-
-   | Variável                   | Exemplo                                                      | Descrição                  |
-   |----------------------------|--------------------------------------------------------------|----------------------------|
-   | `POSTGRES_USER`            | `tasklist`                                                   | Usuário do PostgreSQL      |
-   | `POSTGRES_PASSWORD`        | `tasklist`                                                   | Senha do PostgreSQL        |
-   | `POSTGRES_DB`              | `tasklist`                                                   | Nome do banco de dados     |
-   | `DB_HOST`                  | `localhost`                                                  | Host do PostgreSQL         |
-   | `DB_PORT`                  | `5432`                                                       | Porta do PostgreSQL        |
-   | `JWT_SECRET`               | `example_secret_key`                                         | Chave secreta para JWT     |
-   | `PGADMIN_DEFAULT_EMAIL`    | `admin@jtech.com.br`                                         | Email do pgAdmin           |
-   | `PGADMIN_DEFAULT_PASSWORD` | `admin`                                                      | Senha do pgAdmin           |
-
-2. Execute o ambiente completo (frontend + backend):
-   ```bash
-   docker compose up --build
-   ```
-3. A API estará disponível em [http://localhost:8000](http://localhost:8000)
-4. Swagger UI: [http://localhost:8000/swagger-ui.html](http://localhost:8000/swagger-ui.html)
-5. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`)
-6. Frontend: [http://localhost:5173](http://localhost:5173)
 
 ## 4. Como Rodar os Testes
 

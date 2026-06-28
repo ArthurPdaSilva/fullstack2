@@ -66,22 +66,6 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
    npm run build
    ```
 
-### 3.2 Como Rodar com Docker
-
-**Pré-requisitos:** Docker e Docker Compose.
-
-1. Na raiz do projeto, execute o ambiente completo:
-
-   ```bash
-   docker compose up --build
-   ```
-
-2. A aplicação estará disponível em [http://localhost:5173](http://localhost:5173)
-
-3. A API estará disponível em [http://localhost:8000](http://localhost:8000)
-
-4. pgAdmin: [http://localhost:5050](http://localhost:5050) (email: `admin@jtech.com.br` / senha: `admin`)
-
 ## 4. Como Rodar os Testes
 
 ```bash
