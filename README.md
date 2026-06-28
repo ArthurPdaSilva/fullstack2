@@ -244,11 +244,12 @@ npm run type-check    # vue-tsc — type-checking de todos os arquivos
 npm run lint          # ESLint — linting com autofix
 ```
 
-**Suites de teste (8 spec files):**
+**Suites de teste (9 spec files):**
 
 | Arquivo | Feature |
 |---------|---------|
 | `authStore.spec.ts` | Autenticação (login, registro, logout, refresh) |
+| `LoginForm.spec.ts` | Componente de formulário de login/registro |
 | `listStore.spec.ts` | Listas de tarefas (CRUD via API) |
 | `taskStore.spec.ts` | Tarefas (CRUD, filtro por lista) |
 | `ListCard.spec.ts` | Componente de card de lista |
@@ -397,7 +398,8 @@ fullstack2/
         ├── features/                   # Módulos por domínio (feature-based)
         │   ├── auth/                   # Autenticação
         │   │   ├── __tests__/
-        │   │   │   └── authStore.spec.ts
+        │   │   │   ├── authStore.spec.ts
+        │   │   │   └── LoginForm.spec.ts
         │   │   ├── components/
         │   │   │   └── LoginForm.vue
         │   │   ├── stores/
