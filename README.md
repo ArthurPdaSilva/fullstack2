@@ -32,6 +32,15 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 - Comunicação com backend via Axios com interceptors JWT e renovação automática de token com fila de requisições
 - Rotas protegidas por Navigation Guards do Vue Router
 - Testes unitários com Vitest + Vue Test Utils + jsdom
+- Alias `@` configurado no Vite mapeando para `src/` para imports absolutos
+
+**Rotas:**
+
+| Path | Componente | Proteção |
+|------|-----------|----------|
+| `/login` | `LoginView` | Redireciona para `/` se autenticado |
+| `/` | `DashboardView` | Requer autenticação |
+| `/tasks/:listId` | `TasksView` | Requer autenticação |
 
 ---
 
@@ -61,6 +70,7 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 | **Linguagem (frontend)** | TypeScript | ~5.8 | Superset tipado para JavaScript |
 | **Framework (frontend)** | Vue 3 | 3.5 | Framework frontend (Composition API) |
 | **Build / Dev Server** | Vite | 7.0 | Build tool e dev server |
+| | vite-plugin-vue-devtools | 8.0 | Vue DevTools no navegador em desenvolvimento |
 | **Roteamento** | Vue Router | 4.5 | Roteamento SPA |
 | **Estado** | Pinia | 3.0 | Gerenciamento de estado |
 | | pinia-plugin-persistedstate | 4.2 | Persistência automática em localStorage |
@@ -156,6 +166,8 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
     | `JWT_SECRET` | Chave secreta para JWT | (gerada no exemplo) |
 
    > O Spring Boot carrega automaticamente as variáveis do arquivo `.env` via `spring-dotenv`. Não é necessário exportá-las manualmente no terminal.
+   >
+   > O `.env.example` também contém `PGADMIN_DEFAULT_EMAIL` e `PGADMIN_DEFAULT_PASSWORD` — essas variáveis são consumidas **apenas** pelo serviço pgAdmin no Docker Compose, não pelo backend.
 
 3. Execute a aplicação:
 
@@ -222,7 +234,7 @@ Os testes usam **JUnit 5** + **Mockito** para testes unitários e **MockMvc** pa
 ./mvnw test
 ```
 
-**Suites de teste (9 classes):**
+**Suites de teste (10 classes):**
 
 | Classe | Tipo | Escopo |
 |--------|------|--------|
@@ -235,6 +247,7 @@ Os testes usam **JUnit 5** + **Mockito** para testes unitários e **MockMvc** pa
 | `TaskControllerTest` | Integração | Endpoints de tarefas |
 | `TaskListControllerTest` | Integração | Endpoints de listas |
 | `BackendApplicationTests` | Smoke | Contexto da aplicação sobe |
+| `HealthControllerTest` | Integração | Health check endpoint |
 
 ### Frontend
 
@@ -242,7 +255,20 @@ Os testes usam **JUnit 5** + **Mockito** para testes unitários e **MockMvc** pa
 npm run test:unit     # Vitest (jsdom + Vue Test Utils)
 npm run type-check    # vue-tsc — type-checking de todos os arquivos
 npm run lint          # ESLint — linting com autofix
+npm run format        # Prettier — formatação de código
 ```
+
+**Scripts npm disponíveis:**
+
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Servidor de desenvolvimento Vite |
+| `npm run build` | Build de produção |
+| `npm run preview` | Preview do build de produção |
+| `npm run test:unit` | Testes unitários com Vitest |
+| `npm run type-check` | Type-checking com vue-tsc |
+| `npm run lint` | Linting com ESLint (autofix) |
+| `npm run format` | Formatação com Prettier |
 
 **Suites de teste (9 spec files):**
 
@@ -454,6 +480,47 @@ fullstack2/
             └── components/
                 └── AppHeader.vue       # Componente compartilhado (header da aplicação)
 ```
+
+---
+
+## 5.1. Schema do Banco de Dados
+
+O esquema é gerenciado pelo Hibernate (`ddl-auto=update`), sem migrations manuais. As principais tabelas:
+
+### `users`
+
+| Coluna | Tipo | Restrições |
+|--------|------|------------|
+| `id` | UUID | PK, gerado automaticamente |
+| `name` | VARCHAR(255) | NOT NULL |
+| `email` | VARCHAR(255) | NOT NULL, UNIQUE |
+| `password` | VARCHAR(255) | NOT NULL (hash BCrypt) |
+
+### `task_lists`
+
+| Coluna | Tipo | Restrições |
+|--------|------|------------|
+| `id` | UUID | PK, gerado automaticamente |
+| `name` | VARCHAR(255) | NOT NULL |
+| `user_id` | UUID | FK → `users(id)`, NOT NULL |
+| `created_at` | TIMESTAMP | NOT NULL |
+
+### `tasks`
+
+| Coluna | Tipo | Restrições |
+|--------|------|------------|
+| `id` | UUID | PK, gerado automaticamente |
+| `title` | VARCHAR(255) | NOT NULL |
+| `description` | TEXT | NULLABLE |
+| `completed` | BOOLEAN | DEFAULT FALSE |
+| `user_id` | UUID | FK → `users(id)`, NOT NULL |
+| `task_list_id` | UUID | FK → `task_lists(id)`, ON DELETE CASCADE, NULLABLE |
+
+**Relacionamentos:**
+
+- `users` 1:N `task_lists` — um usuário pode ter várias listas
+- `users` 1:N `tasks` — um usuário pode ter várias tarefas
+- `task_lists` 1:N `tasks` — uma lista pode ter várias tarefas; ao excluir a lista, as tarefas são removidas em cascata
 
 ---
 
