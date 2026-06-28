@@ -10,4 +10,5 @@ public interface TaskRepository extends JpaRepository<Task, UUID> {
     List<Task> findByUserIdOrderByCreatedAtDesc(UUID userId);
     Optional<Task> findByIdAndUserId(UUID id, UUID userId);
     boolean existsByIdAndUserId(UUID id, UUID userId);
+    long countByTaskListId(UUID taskListId);
 }

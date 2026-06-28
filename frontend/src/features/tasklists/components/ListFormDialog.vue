@@ -33,18 +33,18 @@ watch(
   },
 )
 
-async function save() {
-  const { valid: isValid } = await formRef.value.validate()
-  if (!isValid) return
+  async function save() {
+    const { valid: isValid } = await formRef.value.validate()
+    if (!isValid) return
 
-  if (props.list) {
-    listStore.renameList(props.list.id, name.value)
-  } else {
-    listStore.addList(name.value)
+    if (props.list) {
+      await listStore.renameList(props.list.id, name.value)
+    } else {
+      await listStore.addList(name.value)
+    }
+    emit('saved')
+    emit('update:modelValue', false)
   }
-  emit('saved')
-  emit('update:modelValue', false)
-}
 </script>
 
 <template>

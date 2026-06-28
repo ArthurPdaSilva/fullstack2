@@ -29,7 +29,7 @@ describe('ListCard', () => {
     id: 'list-1',
     name: 'Trabalho',
     createdAt: '2024-01-01T00:00:00Z',
-    taskIds: [],
+    taskCount: 0,
   }
 
   it('renders the list name', () => {

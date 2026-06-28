@@ -9,6 +9,7 @@ import com.jtech.tasklist.backend.task.domain.Task;
 import com.jtech.tasklist.backend.task.dto.TaskRequest;
 import com.jtech.tasklist.backend.task.dto.TaskResponse;
 import com.jtech.tasklist.backend.task.repository.TaskRepository;
+import com.jtech.tasklist.backend.tasklist.repository.TaskListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +23,31 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final TaskListRepository taskListRepository;
 
     @Transactional
     public TaskResponse create(TaskRequest request, String userId) {
         var user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        var task = Task.builder()
+        var taskBuilder = Task.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .completed(request.isCompleted())
-                .user(user)
-                .build();
+                .user(user);
 
+        if (request.getTaskListId() != null) {
+            var taskList = taskListRepository.findById(request.getTaskListId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Task list not found"));
+
+            if (!taskList.getUser().getId().equals(UUID.fromString(userId))) {
+                throw new AccessDeniedException("You do not have permission to use this task list");
+            }
+
+            taskBuilder.taskList(taskList);
+        }
+
+        var task = taskBuilder.build();
         task = taskRepository.save(task);
         return TaskResponse.fromEntity(task);
     }

@@ -85,6 +85,7 @@ src/
 │   │   │   ├── dto/
 │   │   │   │   ├── AuthResponse.java
 │   │   │   │   ├── LoginRequest.java
+│   │   │   │   ├── RefreshRequest.java
 │   │   │   │   └── RegisterRequest.java
 │   │   │   ├── repository/
 │   │   │   │   └── UserRepository.java
@@ -103,6 +104,19 @@ src/
 │   │   │   │   └── TaskRepository.java
 │   │   │   └── service/
 │   │   │       └── TaskService.java
+│   │   │
+│   │   ├── tasklist/                        # Módulo de listas de tarefas
+│   │   │   ├── controller/
+│   │   │   │   └── TaskListController.java
+│   │   │   ├── domain/
+│   │   │   │   └── TaskList.java
+│   │   │   ├── dto/
+│   │   │   │   ├── TaskListRequest.java
+│   │   │   │   └── TaskListResponse.java
+│   │   │   ├── repository/
+│   │   │   │   └── TaskListRepository.java
+│   │   │   └── service/
+│   │   │       └── TaskListService.java
 │   │   │
 │   │   ├── config/                          # Configurações globais
 │   │   │   ├── OpenApiConfig.java
@@ -130,9 +144,12 @@ src/
     │   │   └── AuthServiceTest.java
     │   ├── integration/
     │   │   ├── AuthControllerTest.java
-    │   │   └── TaskControllerTest.java
-    │   └── task/
-    │       └── TaskServiceTest.java
+    │   │   ├── TaskControllerTest.java
+    │   │   └── TaskListControllerTest.java
+    │   ├── task/
+    │   │   └── TaskServiceTest.java
+    │   └── tasklist/
+    │       └── TaskListServiceTest.java
     └── resources/
         └── application.properties
 ```
@@ -161,11 +178,24 @@ Optei por utilizar Docker para conteinerizar todos os serviços da aplicação, 
 
 Pensando no crescimento do nosso sistema, vejo a injeção de dependência como um passo fundamental. Ela nos ajuda a manter um bom encapsulamento, garante que os contratos sejam seguidos à risca e dá aquela flexibilidade enorme para trocar uma classe por outra sempre que a gente precisar.
 
+### Persistência de Listas de Tarefas (TaskList)
+
+Originalmente as listas de tarefas eram armazenadas apenas no `localStorage` do frontend. Para garantir persistência entre dispositivos e sessões, criei a entidade `TaskList` no backend:
+
+- **Entidade**: `tasklist.domain.TaskList` — `id` (UUID), `name`, `user` (FK → `users`), `createdAt`.
+- **Relação com Task**: Adicionei `task_list_id` (FK) na tabela `tasks`, com `ON DELETE CASCADE` — ao excluir uma lista, todas as suas tarefas são removidas automaticamente.
+- **Endpoints CRUD**: `POST/GET /tasklists`, `PUT/DELETE /tasklists/{id}` — todos protegidos por JWT, com verificação de ownership.
+- **TaskCount**: O endpoint `GET /tasklists` retorna a contagem de tarefas por lista (`taskCount`), calculada via `countByTaskListId` no `TaskRepository`.
+- **Criação de tarefas**: O DTO `TaskRequest` agora aceita `taskListId` opcional (UUID) — se informado, a task é vinculada à lista correspondente.
+- **Contagem de tarefas**: O `taskCount` é retornado dinamicamente na resposta, sem necessidade de campo adicional na entidade TaskList, calculado via `TaskRepository.countByTaskListId()`.
+- **Testes**: 11 testes unitários no `TaskListServiceTest` e 9 testes de integração no `TaskListControllerTest`, totalizando 20 novos testes. Testes existentes do `TaskServiceTest` e `TaskControllerTest` foram ajustados para a nova assinatura do `TaskRequest`.
+
+No frontend, o `listStore` foi refatorado para consumir esses endpoints via Axios, eliminando completamente a dependência de `localStorage` para listas. A relação entre tarefas e listas agora é gerenciada pelo backend através do campo `taskListId` no model `Task`.
+
 
 ## 7. Melhorias e Roadmap
 
 ### Curto prazo
-- [ ] Criar uma representação da listagem de tarefas no Domínio e adicionar testes para isso
 
 ### Médio prazo
 - [ ] Paginação no servidor para listas com muitas tarefas

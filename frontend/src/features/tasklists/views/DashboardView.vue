@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import DeleteConfirmDialog from '../components/DeleteConfirmDialog.vue'
 import ListCard from '../components/ListCard.vue'
 import ListFormDialog from '../components/ListFormDialog.vue'
@@ -16,8 +16,12 @@ const deletingList = ref<TaskList | null>(null)
 function taskCount(listId: string) {
   const list = listStore.getListById(listId)
   if (!list) return 0
-  return list.taskIds.length
+  return list.taskCount
 }
+
+onMounted(() => {
+  listStore.fetchAll()
+})
 
 function openNew() {
   editingList.value = null
@@ -34,9 +38,9 @@ function openDelete(list: TaskList) {
   showDeleteDialog.value = true
 }
 
-function confirmDelete() {
+async function confirmDelete() {
   if (!deletingList.value) return
-  listStore.deleteList(deletingList.value.id)
+  await listStore.deleteList(deletingList.value.id)
   showDeleteDialog.value = false
   deletingList.value = null
 }

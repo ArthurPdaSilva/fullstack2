@@ -2,6 +2,7 @@ package com.jtech.tasklist.backend.auth.controller;
 
 import com.jtech.tasklist.backend.auth.dto.AuthResponse;
 import com.jtech.tasklist.backend.auth.dto.LoginRequest;
+import com.jtech.tasklist.backend.auth.dto.RefreshRequest;
 import com.jtech.tasklist.backend.auth.dto.RegisterRequest;
 import com.jtech.tasklist.backend.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -25,6 +26,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         var response = authService.login(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@Valid @RequestBody RefreshRequest request) {
+        var response = authService.refresh(request);
         return ResponseEntity.ok(response);
     }
 }

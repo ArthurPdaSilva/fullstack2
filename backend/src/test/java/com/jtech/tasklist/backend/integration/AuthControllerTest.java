@@ -147,4 +147,42 @@ class AuthControllerTest {
                         .content("{}"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void refresh_ShouldReturn200_WhenTokenIsValid() throws Exception {
+        var registerResult = mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"John\",\"email\":\"john@email.com\",\"password\":\"123456\"}"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        var content = registerResult.getResponse().getContentAsString();
+        var refreshToken = content.split("\"refreshToken\":\"")[1].split("\"")[0];
+
+        mockMvc.perform(post("/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"" + refreshToken + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andExpect(jsonPath("$.refreshToken").isNotEmpty())
+                .andExpect(jsonPath("$.type").value("Bearer"))
+                .andExpect(jsonPath("$.expiresIn").value(900000L))
+                .andExpect(jsonPath("$.refreshExpiresIn").value(604800000L));
+    }
+
+    @Test
+    void refresh_ShouldReturn401_WhenTokenIsInvalid() throws Exception {
+        mockMvc.perform(post("/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"invalid-token\"}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void refresh_ShouldReturn400_WhenTokenIsBlank() throws Exception {
+        mockMvc.perform(post("/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"refreshToken\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
 }

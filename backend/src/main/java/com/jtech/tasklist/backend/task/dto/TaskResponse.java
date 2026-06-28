@@ -17,6 +17,7 @@ public class TaskResponse {
     private String title;
     private String description;
     private boolean completed;
+    private UUID taskListId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -26,6 +27,7 @@ public class TaskResponse {
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .completed(task.isCompleted())
+                .taskListId(task.getTaskList() != null ? task.getTaskList().getId() : null)
                 .createdAt(task.getCreatedAt())
                 .updatedAt(task.getUpdatedAt())
                 .build();

@@ -9,11 +9,29 @@ import type {
   User,
 } from "../types";
 
+function readRefreshToken(): string | null {
+  try {
+    const raw = localStorage.getItem("auth_refresh");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeRefreshToken(value: string | null) {
+  if (value) {
+    localStorage.setItem("auth_refresh", JSON.stringify(value));
+  } else {
+    localStorage.removeItem("auth_refresh");
+  }
+}
+
 export const useAuthStore = defineStore(
 	"auth",
 	() => {
 		const user = ref<User | null>(null);
 		const token = ref<string | null>(null);
+		const refreshToken = ref<string | null>(readRefreshToken());
 
 		const isAuthenticated = computed(() => !!token.value && !!user.value);
 
@@ -28,33 +46,50 @@ export const useAuthStore = defineStore(
 		async function login(payload: LoginPayload) {
 			const { data } = await api.post<AuthResponse>("/auth/login", payload);
 			token.value = data.token;
+			refreshToken.value = data.refreshToken;
+			writeRefreshToken(data.refreshToken);
 			const decoded = parseJwt(data.token);
 			user.value = {
 				id: (decoded.sub as string) || "",
 				name: (decoded.name as string) || payload.email.split("@")[0],
 				email: payload.email,
 			};
-			useListStore().load();
+			useListStore().fetchAll();
 		}
 
 		async function register(payload: RegisterPayload) {
 			const { data } = await api.post<AuthResponse>("/auth/register", payload);
 			token.value = data.token;
+			refreshToken.value = data.refreshToken;
+			writeRefreshToken(data.refreshToken);
 			user.value = {
 				id: parseJwt(data.token).sub as string,
 				name: payload.name,
 				email: payload.email,
 			};
-			useListStore().load();
+			useListStore().fetchAll();
+		}
+
+		async function refreshTokenAction() {
+			if (!refreshToken.value) throw new Error("No refresh token available");
+			const { data } = await api.post<AuthResponse>("/auth/refresh", {
+				refreshToken: refreshToken.value,
+			});
+			token.value = data.token;
+			refreshToken.value = data.refreshToken;
+			writeRefreshToken(data.refreshToken);
+			return data.token;
 		}
 
 		function logout() {
 			user.value = null;
 			token.value = null;
-			useListStore().load();
+			refreshToken.value = null;
+			writeRefreshToken(null);
+			useListStore().lists = [];
 		}
 
-		return { user, token, isAuthenticated, login, register, logout };
+		return { user, token, refreshToken, isAuthenticated, login, register, refreshTokenAction, logout };
 	},
 	{
 		persist: {
@@ -62,5 +97,5 @@ export const useAuthStore = defineStore(
 			storage: localStorage,
 			pick: ["user", "token"],
 		},
-	},
+	} as any,
 );

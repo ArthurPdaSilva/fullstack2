@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useTaskStore } from '../stores/taskStore'
-import { useListStore } from '@/features/tasklists/stores/listStore'
 import { translateApiError } from '@/services/errorHandler'
 
 const props = defineProps<{
@@ -16,7 +15,6 @@ const emit = defineEmits<{
 }>()
 
 const taskStore = useTaskStore()
-const listStore = useListStore()
 const title = ref('')
 const description = ref('')
 const valid = ref(false)
@@ -26,12 +24,9 @@ const error = ref('')
 const titleRules = [
   (v: string) => !!v || 'Título é obrigatório',
   (v: string) => {
-    const list = listStore.getListById(props.listId)
-    if (!list) return true
-    const exists = list.taskIds.some((id) => {
-      const t = taskStore.tasks.find((task) => task.id === id)
-      return t && t.title === v.trim() && t.id !== props.task?.id
-    })
+    const exists = taskStore.tasks.some(
+      (t) => t.taskListId === props.listId && t.title === v.trim() && t.id !== props.task?.id,
+    )
     return !exists || 'Já existe uma tarefa com este título'
   },
 ]

@@ -3,15 +3,19 @@ package com.jtech.tasklist.backend.auth.service;
 import com.jtech.tasklist.backend.auth.domain.User;
 import com.jtech.tasklist.backend.auth.dto.AuthResponse;
 import com.jtech.tasklist.backend.auth.dto.LoginRequest;
+import com.jtech.tasklist.backend.auth.dto.RefreshRequest;
 import com.jtech.tasklist.backend.auth.dto.RegisterRequest;
 import com.jtech.tasklist.backend.auth.repository.UserRepository;
 import com.jtech.tasklist.backend.exception.BadRequestException;
+import com.jtech.tasklist.backend.exception.ResourceNotFoundException;
 import com.jtech.tasklist.backend.exception.UnauthorizedException;
 import com.jtech.tasklist.backend.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +50,22 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         user = userRepository.save(user);
+        return buildAuthResponse(user);
+    }
+
+    @Transactional
+    public AuthResponse refresh(RefreshRequest request) {
+        String refreshToken = request.getRefreshToken();
+
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new UnauthorizedException("Invalid or expired refresh token");
+        }
+
+        String userId = tokenProvider.getUserIdFromToken(refreshToken);
+
+        var user = userRepository.findById(UUID.fromString(userId))
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         return buildAuthResponse(user);
     }
 

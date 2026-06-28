@@ -9,6 +9,7 @@ import com.jtech.tasklist.backend.task.dto.TaskRequest;
 import com.jtech.tasklist.backend.task.repository.TaskRepository;
 import com.jtech.tasklist.backend.task.service.TaskService;
 import com.jtech.tasklist.backend.task.service.TaskServiceImpl;
+import com.jtech.tasklist.backend.tasklist.repository.TaskListRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,9 @@ class TaskServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private TaskListRepository taskListRepository;
+
     private TaskService taskService;
 
     private UUID userId;
@@ -42,7 +46,7 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        taskService = new TaskServiceImpl(taskRepository, userRepository);
+        taskService = new TaskServiceImpl(taskRepository, userRepository, taskListRepository);
 
         userId = UUID.randomUUID();
         taskId = UUID.randomUUID();
@@ -66,7 +70,7 @@ class TaskServiceTest {
 
     @Test
     void create_ShouldReturnTaskResponse() {
-        var request = new TaskRequest("Test Task", "Test Description", false);
+        var request = new TaskRequest("Test Task", "Test Description", false, null);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
@@ -82,11 +86,11 @@ class TaskServiceTest {
 
     @Test
     void create_ShouldThrowException_WhenUserNotFound() {
-        var request = new TaskRequest("Test Task", "Test Description", false);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> taskService.create(request, userId.toString()));
+        var request = new TaskRequest("Test Task", "Test Description", false, null);
+ 
+         when(userRepository.findById(userId)).thenReturn(Optional.empty());
+ 
+         assertThrows(ResourceNotFoundException.class, () -> taskService.create(request, userId.toString()));
         verify(taskRepository, never()).save(any(Task.class));
     }
 
@@ -129,7 +133,7 @@ class TaskServiceTest {
 
     @Test
     void update_ShouldReturnUpdatedTask() {
-        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true, null);
 
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
@@ -144,7 +148,7 @@ class TaskServiceTest {
 
     @Test
     void update_ShouldThrowException_WhenTaskNotFound() {
-        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true, null);
 
         when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
 
@@ -156,7 +160,7 @@ class TaskServiceTest {
     @Test
     void update_ShouldThrowAccessDenied_WhenTaskBelongsToAnotherUser() {
         var otherUserId = UUID.randomUUID();
-        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true, null);
 
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
 
@@ -196,7 +200,7 @@ class TaskServiceTest {
 
     @Test
     void create_ShouldAcceptNullDescription() {
-        var request = new TaskRequest("Title Only", null, false);
+        var request = new TaskRequest("Title Only", null, false, null);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
@@ -219,7 +223,7 @@ class TaskServiceTest {
     @Test
     void update_ShouldPreserveCompletedFlag_WhenNotChanged() {
         task.setCompleted(true);
-        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true);
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", true, null);
 
         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
@@ -233,9 +237,9 @@ class TaskServiceTest {
     @Test
     void update_ShouldUnmarkCompleted_WhenSetToFalse() {
         task.setCompleted(true);
-        var updateRequest = new TaskRequest("Updated Title", "Updated Description", false);
-
-        when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
+        var updateRequest = new TaskRequest("Updated Title", "Updated Description", false, null);
+ 
+         when(taskRepository.findById(taskId)).thenReturn(Optional.of(task));
         when(taskRepository.save(any(Task.class))).thenReturn(task);
 
         var response = taskService.update(taskId, updateRequest, userId.toString());

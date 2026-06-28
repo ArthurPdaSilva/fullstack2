@@ -5,13 +5,14 @@ export interface Task {
   completed: boolean
   createdAt: string
   updatedAt?: string
-  listId: string
+  taskListId: string | null
 }
 
 export interface TaskRequest {
   title: string
   description?: string
   completed?: boolean
+  taskListId?: string | null
 }
 
 export interface TaskResponse {
@@ -19,6 +20,7 @@ export interface TaskResponse {
   title: string
   description: string | null
   completed: boolean
+  taskListId: string | null
   createdAt: string
   updatedAt: string
 }

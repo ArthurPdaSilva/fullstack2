@@ -1,11 +1,24 @@
 import { createPinia, setActivePinia } from 'pinia'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useListStore } from '../stores/listStore'
+
+vi.mock('@/services/api', () => {
+  const mock = {
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+  }
+  return { default: mock }
+})
+
+import api from '@/services/api'
 
 describe('listStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     localStorage.clear()
+    vi.clearAllMocks()
   })
 
   it('starts empty', () => {
@@ -14,111 +27,78 @@ describe('listStore', () => {
     expect(store.lists).toHaveLength(0)
   })
 
-  it('adds a list', () => {
+  it('adds a list via API', async () => {
     const store = useListStore()
-    store.addList('Trabalho')
+    const createdList = { id: 'list-1', name: 'Trabalho', createdAt: new Date().toISOString(), taskCount: 0 }
+    ;(api.post as ReturnType<typeof vi.fn>).mockResolvedValue({ data: createdList })
+
+    const result = await store.addList('Trabalho')
     expect(store.lists).toHaveLength(1)
     expect(store.lists[0].name).toBe('Trabalho')
-    expect(store.lists[0].id).toBeTruthy()
-    expect(store.lists[0].taskIds).toEqual([])
+    expect(store.lists[0].id).toBe('list-1')
+    expect(result).toEqual(createdList)
+    expect(api.post).toHaveBeenCalledWith('/tasklists', { name: 'Trabalho' })
   })
 
-  it('renames a list', () => {
+  it('renames a list via API', async () => {
     const store = useListStore()
-    const list = store.addList('Trabalho')
-    store.renameList(list.id, 'Work')
+    const updatedList = { id: 'list-1', name: 'Work', createdAt: new Date().toISOString(), taskCount: 0 }
+    store.lists = [{ id: 'list-1', name: 'Trabalho', createdAt: new Date().toISOString(), taskCount: 0 }]
+    ;(api.put as ReturnType<typeof vi.fn>).mockResolvedValue({ data: updatedList })
+
+    await store.renameList('list-1', 'Work')
     expect(store.lists[0].name).toBe('Work')
+    expect(api.put).toHaveBeenCalledWith('/tasklists/list-1', { name: 'Work' })
   })
 
-  it('deletes a list', () => {
+  it('deletes a list via API', async () => {
     const store = useListStore()
-    const list = store.addList('Trabalho')
-    store.deleteList(list.id)
+    ;(api.delete as ReturnType<typeof vi.fn>).mockResolvedValue({})
+    store.lists = [{ id: 'list-1', name: 'Trabalho', createdAt: new Date().toISOString(), taskCount: 0 }]
+
+    await store.deleteList('list-1')
     expect(store.isEmpty).toBe(true)
+    expect(api.delete).toHaveBeenCalledWith('/tasklists/list-1')
   })
 
   it('gets list by id', () => {
     const store = useListStore()
-    const list = store.addList('Estudos')
-    expect(store.getListById(list.id)?.name).toBe('Estudos')
+    store.lists = [{ id: 'list-1', name: 'Estudos', createdAt: new Date().toISOString(), taskCount: 0 }]
+    expect(store.getListById('list-1')?.name).toBe('Estudos')
     expect(store.getListById('non-existent')).toBeUndefined()
   })
 
-  it('manages task ids in list', () => {
+  it('fetches all lists from API', async () => {
     const store = useListStore()
-    const list = store.addList('Lista')
-    store.addTaskToList(list.id, 'task-1')
-    store.addTaskToList(list.id, 'task-2')
-    expect(store.getListById(list.id)?.taskIds).toHaveLength(2)
+    const apiLists = [
+      { id: 'list-1', name: 'Trabalho', createdAt: new Date().toISOString(), taskCount: 0 },
+      { id: 'list-2', name: 'Estudos', createdAt: new Date().toISOString(), taskCount: 3 },
+    ]
+    ;(api.get as ReturnType<typeof vi.fn>).mockResolvedValue({ data: apiLists })
 
-    store.removeTaskFromList(list.id, 'task-1')
-    expect(store.getListById(list.id)?.taskIds).toEqual(['task-2'])
+    await store.fetchAll()
+    expect(store.lists).toHaveLength(2)
+    expect(store.lists[1].taskCount).toBe(3)
+    expect(api.get).toHaveBeenCalledWith('/tasklists')
   })
 
   it('detects pending tasks', () => {
     const store = useListStore()
-    const list = store.addList('Lista')
-    store.addTaskToList(list.id, 't1')
-    store.addTaskToList(list.id, 't2')
-
     const tasks = [
-      { id: 't1', completed: false },
-      { id: 't2', completed: true },
+      { id: 't1', completed: false, taskListId: 'list-1' },
+      { id: 't2', completed: true, taskListId: 'list-1' },
     ]
-    expect(store.hasPendingTasks(list.id, tasks)).toBe(true)
+    expect(store.hasPendingTasks('list-1', tasks)).toBe(true)
 
     const allDone = [
-      { id: 't1', completed: true },
-      { id: 't2', completed: true },
+      { id: 't1', completed: true, taskListId: 'list-1' },
+      { id: 't2', completed: true, taskListId: 'list-1' },
     ]
-    expect(store.hasPendingTasks(list.id, allDone)).toBe(false)
+    expect(store.hasPendingTasks('list-1', allDone)).toBe(false)
   })
 
-  it('does not add duplicate task ids', () => {
+  it('hasPendingTasks returns false for empty tasks', () => {
     const store = useListStore()
-    const list = store.addList('Lista')
-    store.addTaskToList(list.id, 'task-1')
-    store.addTaskToList(list.id, 'task-1')
-    expect(store.getListById(list.id)?.taskIds).toHaveLength(1)
-  })
-
-  it('renaming non-existent list does nothing', () => {
-    const store = useListStore()
-    store.renameList('non-existent', 'New Name')
-    expect(store.lists).toHaveLength(0)
-  })
-
-  it('adds multiple lists', () => {
-    const store = useListStore()
-    store.addList('Trabalho')
-    store.addList('Estudos')
-    store.addList('Pessoal')
-    expect(store.lists).toHaveLength(3)
-  })
-
-  it('addTaskToList to non-existent list does nothing', () => {
-    const store = useListStore()
-    store.addTaskToList('non-existent', 'task-1')
-    expect(store.lists).toHaveLength(0)
-  })
-
-  it('removeTaskFromList from non-existent list does nothing', () => {
-    const store = useListStore()
-    store.removeTaskFromList('non-existent', 'task-1')
-    expect(store.lists).toHaveLength(0)
-  })
-
-  it('hasPendingTasks returns false for non-existent list', () => {
-    const store = useListStore()
-    expect(store.hasPendingTasks('non-existent', [])).toBe(false)
-  })
-
-  it('persists lists to localStorage', () => {
-    const store = useListStore()
-    store.addList('Persisted List')
-    const key = `lists_guest`
-    const saved = JSON.parse(localStorage.getItem(key) || '[]')
-    expect(saved).toHaveLength(1)
-    expect(saved[0].name).toBe('Persisted List')
+    expect(store.hasPendingTasks('list-1', [])).toBe(false)
   })
 })

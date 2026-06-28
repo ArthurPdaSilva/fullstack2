@@ -125,6 +125,9 @@ src/
 │   └── index.ts
 │
 ├── services/                        # Camada de serviços (API, error handling)
+│   ├── __tests__/
+│   │   ├── api.spec.ts
+│   │   └── errorHandler.spec.ts
 │   ├── api.ts
 │   └── errorHandler.ts
 │
@@ -155,7 +158,16 @@ Optei por containerizar também o frontend com Docker, seguindo a mesma abordage
 
 ### Implementação da Autenticação
 
-Apesar de o sistema de login ser um requisito mockado, optei por implementá-lo de forma completa no frontend (com exceção do refresh token). Isso faz mais sentido para testar as rotas de login e register exigidas como requisitos no backend, garantindo que a integração entre o usuário da sessão e as tasks ocorra sem erros de segurança ou problemas de persistência.
+Apesar de o sistema de login ser um requisito mockado, optei por implementá-lo de forma completa no frontend. Isso faz mais sentido para testar as rotas de login e register exigidas como requisitos no backend, garantindo que a integração entre o usuário da sessão e as tasks ocorra sem erros de segurança ou problemas de persistência.
+
+### Refresh Token Automático
+
+O backend gera tokens de acesso (15 min) e refresh (7 dias). O frontend agora consome o refresh token de forma transparente:
+
+1. **Armazenamento**: O refresh token é armazenado separadamente no `localStorage` (chave `auth_refresh`), enquanto access token e dados do usuário são persistidos via `pinia-plugin-persistedstate`.
+2. **Interceptador Axios**: Ao receber um `401 Unauthorized`, o interceptador de resposta da instância Axios tenta renovar o token automaticamente chamando `POST /auth/refresh` com o refresh token salvo.
+3. **Fila de requisições**: Se múltiplas chamadas falharem simultaneamente com 401, apenas uma requisição de refresh é feita, e as demais são enfileiradas e retentadas após a renovação.
+4. **Fallback**: Se o refresh também falhar (token expirado/inválido), o usuário é redirecionado ao login e os dados de autenticação são limpos.
 
 ### ESLint + Prettier vs Biome
 
@@ -169,7 +181,6 @@ Apesar de possuir maior experiência com React, optei por desenvolver o projeto 
 
 ### Curto prazo
 
-- [ ] Implementar refresh token automático (backend gera, frontend não consome)
 - [ ] Adicionar feedback visual (toast/snackbar) para operações CRUD
 - [ ] Adicionar loading skeleton nas telas
 - [ ] Dividir a tela de Login com a de Cadastro

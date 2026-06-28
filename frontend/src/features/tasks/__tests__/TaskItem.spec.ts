@@ -21,7 +21,7 @@ describe('TaskItem', () => {
     title: 'Test Task',
     completed: false,
     createdAt: '2024-01-01T00:00:00Z',
-    listId: 'list-1',
+    taskListId: 'list-1',
   }
 
   it('renders the task title', () => {

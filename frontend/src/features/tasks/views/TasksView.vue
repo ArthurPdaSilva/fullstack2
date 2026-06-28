@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAuthStore } from '@/features/auth/stores/authStore'
 import { useListStore } from '@/features/tasklists/stores/listStore'
 import { translateApiError } from '@/services/errorHandler'
 import { computed, onMounted, ref } from 'vue'
@@ -14,7 +13,6 @@ const route = useRoute()
 const router = useRouter()
 const listStore = useListStore()
 const taskStore = useTaskStore()
-const authStore = useAuthStore()
 
 const listId = computed(() => route.params.listId as string)
 const list = computed(() => listStore.getListById(listId.value))
@@ -32,7 +30,7 @@ onMounted(async () => {
     return
   }
   try {
-    await taskStore.fetchAll(authStore.token || undefined)
+    await taskStore.fetchAll()
   } catch (e: unknown) {
     const result = translateApiError(e)
     error.value = Array.isArray(result) ? result[0] : result
@@ -62,7 +60,7 @@ async function toggleTask(taskId: string) {
 
 async function deleteTask(taskId: string) {
   try {
-    await taskStore.removeTask(listId.value, taskId)
+    await taskStore.removeTask(taskId)
   } catch (e: unknown) {
     const result = translateApiError(e)
     error.value = Array.isArray(result) ? result[0] : result

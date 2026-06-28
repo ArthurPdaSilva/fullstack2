@@ -21,6 +21,9 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.jtech.tasklist.backend.auth.dto.RefreshRequest;
+import com.jtech.tasklist.backend.exception.ResourceNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -151,6 +154,58 @@ class AuthServiceTest {
         when(userRepository.findByEmail("John@email.com")).thenReturn(Optional.empty());
 
         assertThrows(UnauthorizedException.class, () -> authService.login(request));
+    }
+
+    @Test
+    void refresh_ShouldReturnAuthResponse_WhenTokenIsValid() {
+        var userId = UUID.randomUUID();
+        var user = User.builder()
+                .id(userId)
+                .name("John")
+                .email("john@email.com")
+                .password("encoded-password")
+                .createdAt(LocalDateTime.now())
+                .build();
+        var request = new RefreshRequest("valid-refresh-token");
+
+        when(tokenProvider.validateToken("valid-refresh-token")).thenReturn(true);
+        when(tokenProvider.getUserIdFromToken("valid-refresh-token")).thenReturn(userId.toString());
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(tokenProvider.generateAccessToken(userId.toString())).thenReturn("new-access-token");
+        when(tokenProvider.generateRefreshToken(userId.toString())).thenReturn("new-refresh-token");
+        when(tokenProvider.getAccessTokenExpiration()).thenReturn(900000L);
+        when(tokenProvider.getRefreshTokenExpiration()).thenReturn(604800000L);
+
+        var response = authService.refresh(request);
+
+        assertNotNull(response);
+        assertEquals("new-access-token", response.getToken());
+        assertEquals("new-refresh-token", response.getRefreshToken());
+        assertEquals("Bearer", response.getType());
+        assertEquals(900000L, response.getExpiresIn());
+        assertEquals(604800000L, response.getRefreshExpiresIn());
+        verify(tokenProvider).validateToken("valid-refresh-token");
+    }
+
+    @Test
+    void refresh_ShouldThrowException_WhenTokenIsInvalid() {
+        var request = new RefreshRequest("invalid-refresh-token");
+
+        when(tokenProvider.validateToken("invalid-refresh-token")).thenReturn(false);
+
+        assertThrows(UnauthorizedException.class, () -> authService.refresh(request));
+    }
+
+    @Test
+    void refresh_ShouldThrowException_WhenUserNotFound() {
+        var userId = UUID.randomUUID();
+        var request = new RefreshRequest("valid-refresh-token");
+
+        when(tokenProvider.validateToken("valid-refresh-token")).thenReturn(true);
+        when(tokenProvider.getUserIdFromToken("valid-refresh-token")).thenReturn(userId.toString());
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> authService.refresh(request));
     }
 
     @Test

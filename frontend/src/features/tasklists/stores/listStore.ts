@@ -1,98 +1,53 @@
-import { useAuthStore } from '@/features/auth/stores/authStore'
+import api from '@/services/api'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import type { TaskList } from '../types'
+import type { TaskList, TaskListRequest } from '../types'
 
 export const useListStore = defineStore('lists', () => {
   const lists = ref<TaskList[]>([])
 
   const isEmpty = computed(() => lists.value.length === 0)
 
-  function storageKey(): string {
-    const uid = useAuthStore().user?.id
-    return `lists_${uid || 'guest'}`
+  async function fetchAll() {
+    const { data } = await api.get<TaskList[]>('/tasklists')
+    lists.value = data
   }
 
-  function save() {
-    localStorage.setItem(storageKey(), JSON.stringify(lists.value))
+  async function addList(name: string): Promise<TaskList> {
+    const { data } = await api.post<TaskList>('/tasklists', { name } as TaskListRequest)
+    lists.value.push(data)
+    return data
   }
 
-  function load() {
-    try {
-      const raw = localStorage.getItem(storageKey())
-      lists.value = raw ? JSON.parse(raw) : []
-    } catch {
-      lists.value = []
+  async function renameList(id: string, newName: string) {
+    const { data } = await api.put<TaskList>(`/tasklists/${id}`, { name: newName } as TaskListRequest)
+    const idx = lists.value.findIndex((l) => l.id === id)
+    if (idx !== -1) {
+      lists.value[idx] = data
     }
   }
 
-  function addList(name: string): TaskList {
-    const id = crypto.randomUUID()
-    const list: TaskList = {
-      id,
-      name: name.trim(),
-      createdAt: new Date().toISOString(),
-      taskIds: [],
-    }
-    lists.value.push(list)
-    save()
-    return list
-  }
-
-  function renameList(id: string, newName: string) {
-    const list = lists.value.find((l) => l.id === id)
-    if (list) {
-      list.name = newName.trim()
-      save()
-    }
-  }
-
-  function deleteList(id: string) {
+  async function deleteList(id: string) {
+    await api.delete(`/tasklists/${id}`)
     lists.value = lists.value.filter((l) => l.id !== id)
-    save()
   }
 
   function getListById(id: string): TaskList | undefined {
     return lists.value.find((l) => l.id === id)
   }
 
-  function addTaskToList(listId: string, taskId: string) {
-    const list = lists.value.find((l) => l.id === listId)
-    if (list && !list.taskIds.includes(taskId)) {
-      list.taskIds.push(taskId)
-      save()
-    }
+  function hasPendingTasks(listId: string, tasks: { id: string; completed: boolean; taskListId?: string | null }[]): boolean {
+    return tasks.some((t) => t.taskListId === listId && !t.completed)
   }
-
-  function removeTaskFromList(listId: string, taskId: string) {
-    const list = lists.value.find((l) => l.id === listId)
-    if (list) {
-      list.taskIds = list.taskIds.filter((id) => id !== taskId)
-      save()
-    }
-  }
-
-  function hasPendingTasks(listId: string, tasks: { id: string; completed: boolean }[]): boolean {
-    const list = lists.value.find((l) => l.id === listId)
-    if (!list) return false
-    return list.taskIds.some((id) => {
-      const task = tasks.find((t) => t.id === id)
-      return task && !task.completed
-    })
-  }
-
-  load()
 
   return {
     lists,
     isEmpty,
-    load,
+    fetchAll,
     addList,
     renameList,
     deleteList,
     getListById,
-    addTaskToList,
-    removeTaskFromList,
     hasPendingTasks,
   }
 })
