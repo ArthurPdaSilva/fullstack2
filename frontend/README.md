@@ -30,13 +30,12 @@ Organizei o frontend em uma arquitetura **feature-based** modular. Cada domínio
 | @mdi/font               | Ícones Material Design                         |
 | Docker / Docker Compose | Containerização e ambiente local               |
 
-## 3. Como Rodar
-
-### 3.1 Como Rodar Localmente
+## 3. Como Rodar Localmente
 
 **Pré-requisitos:** Node.js 18+, npm (ou pnpm/yarn).
 
 1. Copie o arquivo de ambiente de exemplo:
+
    ```bash
    cp .env.example .env
    ```

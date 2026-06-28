@@ -31,9 +31,7 @@ Eu optei por não dar continuidade à arquitetura hexagonal proposta no template
 | MockMvc | Testes de integração REST |
 | Docker / Docker Compose | Containerização e ambiente local |
 
-## 3. Como Rodar 
-
-## 3.1 Como Rodar Localmente
+## 3. Como Rodar Localmente
 
 **Pré-requisitos:** Java 17, Maven (ou o Maven Wrapper `./mvnw`), PostgreSQL 16 rodando.
 
