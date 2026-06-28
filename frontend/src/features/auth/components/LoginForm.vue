@@ -48,6 +48,7 @@ function toggleMode() {
   email.value = ''
   password.value = ''
   error.value = ''
+  formRef.value?.reset()
 }
 </script>
 

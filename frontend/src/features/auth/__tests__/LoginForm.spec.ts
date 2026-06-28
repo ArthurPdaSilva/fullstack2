@@ -75,4 +75,21 @@ describe('LoginForm', () => {
 
     expect(wrapper.find('.v-alert').exists()).toBe(false)
   })
+
+  it('clears validation messages when toggling modes', async () => {
+    const wrapper = mountLoginForm()
+
+    await wrapper.find('form').trigger('submit')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('Email é obrigatório')
+    expect(wrapper.text()).toContain('Senha é obrigatória')
+
+    const toggleBtn = wrapper.findAllComponents({ name: 'v-btn' }).at(-1)!
+    await toggleBtn.trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).not.toContain('Email é obrigatório')
+    expect(wrapper.text()).not.toContain('Senha é obrigatória')
+  })
 })
