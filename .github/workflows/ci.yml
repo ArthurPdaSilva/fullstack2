@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend (test + build)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+
+      - name: Test
+        run: ./mvnw test -B
+        working-directory: ./backend
+
+      - name: Build
+        run: ./mvnw package -DskipTests -B
+        working-directory: ./backend
+
+  frontend:
+    name: Frontend (lint + type-check + test + build)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ./frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./frontend
+
+      - name: Lint
+        run: npm run lint
+        working-directory: ./frontend
+
+      - name: Type-check
+        run: npm run type-check
+        working-directory: ./frontend
+
+      - name: Test
+        run: npm run test:unit
+        working-directory: ./frontend
+
+      - name: Build
+        run: npm run build-only
+        working-directory: ./frontend

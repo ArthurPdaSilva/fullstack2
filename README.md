@@ -235,6 +235,9 @@ npm run lint          # ESLint — linting com autofix
 
 ```
 fullstack2/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                      # GitHub Actions: lint + test + build (push/PR na main)
 ├── .gitignore                          # Ignora .env na raiz
 ├── .vscode/
 │   └── settings.json
@@ -492,5 +495,4 @@ Apesar de possuir maior experiência com React, optei por desenvolver o projeto 
 - [ ] Modo escuro (dark theme) nativo do Vuetify
 - [ ] Suporte a multi-idiomas (i18n)
 - [ ] Testes E2E com Playwright ou Cypress
-- [ ] Pipeline de CI/CD com GitHub Actions (lint → test → build → deploy)
 - [ ] Títulos dinâmicos para cada página (document title)
