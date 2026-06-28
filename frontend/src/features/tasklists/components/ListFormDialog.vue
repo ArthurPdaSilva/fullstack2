@@ -60,7 +60,7 @@ async function save() {
         {{ list ? 'Renomear Lista' : 'Nova Lista' }}
       </v-card-title>
       <v-card-text class="px-6 pb-0">
-        <v-form ref="formRef" v-model="valid" @submit.prevent="save">
+        <v-form ref="formRef" v-model="valid" validate-on="submit" @submit.prevent="save">
           <v-text-field
             v-model="name"
             label="Nome da lista"

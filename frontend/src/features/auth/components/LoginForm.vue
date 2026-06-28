@@ -17,15 +17,9 @@ const error = ref('')
 const valid = ref(false)
 const formRef = ref()
 
-const emailRules = [
-  (v: string) => !!v || 'Email é obrigatório',
-]
-const passwordRules = [
-  (v: string) => !!v || 'Senha é obrigatória',
-]
-const nameRules = [
-  (v: string) => !!v || 'Nome é obrigatório',
-]
+const emailRules = [(v: string) => !!v || 'Email é obrigatório']
+const passwordRules = [(v: string) => !!v || 'Senha é obrigatória']
+const nameRules = [(v: string) => !!v || 'Nome é obrigatório']
 
 async function handleSubmit() {
   error.value = ''
@@ -57,14 +51,16 @@ function toggleMode() {
 <template>
   <v-card class="pa-8" max-width="420" width="100%" rounded="xl">
     <div class="text-center mb-6">
-      <v-icon size="48" color="primary" class="mb-2">mdi-checkbox-marked-circle-plus-outline</v-icon>
+      <v-icon size="48" color="primary" class="mb-2"
+        >mdi-checkbox-marked-circle-plus-outline</v-icon
+      >
       <h2 class="text-h5 font-weight-bold">{{ isRegister ? 'Criar Conta' : 'Bem-vindo' }}</h2>
       <p class="text-body-2 text-medium-emphasis mt-1">
         {{ isRegister ? 'Preencha os dados para se cadastrar' : 'Faça login para continuar' }}
       </p>
     </div>
 
-    <v-form ref="formRef" v-model="valid" @submit.prevent="handleSubmit">
+    <v-form ref="formRef" v-model="valid" validate-on="submit" @submit.prevent="handleSubmit">
       <v-text-field
         v-if="isRegister"
         v-model="name"
@@ -94,14 +90,7 @@ function toggleMode() {
         {{ error }}
       </v-alert>
 
-      <v-btn
-        type="submit"
-        color="primary"
-        block
-        size="large"
-        :loading="loading"
-        class="mb-3 mt-2"
-      >
+      <v-btn type="submit" color="primary" block size="large" :loading="loading" class="mb-3 mt-2">
         {{ isRegister ? 'Cadastrar' : 'Entrar' }}
       </v-btn>
     </v-form>

@@ -85,7 +85,7 @@ async function save() {
         {{ task ? 'Editar Tarefa' : 'Nova Tarefa' }}
       </v-card-title>
       <v-card-text class="px-6 pb-0">
-        <v-form ref="formRef" v-model="valid" @submit.prevent="save">
+        <v-form ref="formRef" v-model="valid" validate-on="submit" @submit.prevent="save">
           <v-text-field
             v-model="title"
             label="Título"
