@@ -1,6 +1,6 @@
 # FullStack2 — JTech Challenge
 
-Monorepo do desafio técnico Fullstack2 da JTech. Uma aplicação TODO List multi-usuário com backend em Java/Spring Boot e frontend em Vue 3/TypeScript, tudo containerizado com Docker.
+Monorepo do [desafio técnico Fullstack2](EXPLANATION.md) da JTech. Uma aplicação TODO List multi-usuário com backend em Java/Spring Boot e frontend em Vue 3/TypeScript, tudo containerizado com Docker.
 
 ---
 
@@ -629,3 +629,7 @@ Optei por manter apenas a **validação** sem deploy automático por enquanto �
 - [ ] Suporte a multi-idiomas (i18n)
 - [ ] Testes E2E com Playwright ou Cypress
 - [ ] Títulos dinâmicos para cada página (document title)
+
+---
+
+© 2026 Arthur Pereira da Silva. Todos os direitos reservados.
